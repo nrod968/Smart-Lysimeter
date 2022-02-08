@@ -1,6 +1,6 @@
 from mimetypes import init
-from View.gui import init_gui
+from View.gui import SmartLysimeterView
 
 def main():
-    window = init_gui()
+    view = SmartLysimeterView()
 main()
