@@ -23,6 +23,11 @@ class SmartLysimeterHome():
             highlightthickness = 0,
             relief = "ridge"
         )
+        self.place()
+
+        
+    def place(self):
+        self._canvas.place(x = 0, y = 0)
 
         self._canvas.create_rectangle(
             277.00000000000006,
@@ -110,7 +115,6 @@ class SmartLysimeterHome():
             fill="#000000",
             font=("RobotoRoman Bold", 22 * -1)
         )
-    def place(self):
-        self._canvas.place(x = 0, y = 0)
     def unplace(self):
+        self._canvas.delete("all")
         self._canvas.place_forget()

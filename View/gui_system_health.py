@@ -1,8 +1,8 @@
 from pathlib import Path
 
-# from tkinter import *
+from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+#from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -23,7 +23,8 @@ class SmartLysimeterSystemHealth():
             highlightthickness = 0,
             relief = "ridge"
         )
-
+    def place(self):
+        self._canvas.place(x = 0, y = 0)
         self._canvas.create_rectangle(
             0.0,
             0.0,
@@ -141,7 +142,7 @@ class SmartLysimeterSystemHealth():
             110.0,
             495.00000000000006,
             200.0,
-            fill="#000000",
+            fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
@@ -149,7 +150,7 @@ class SmartLysimeterSystemHealth():
             110.0,
             775.0,
             200.0,
-            fill="#000000",
+            fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
@@ -157,7 +158,7 @@ class SmartLysimeterSystemHealth():
             220.0,
             495.00000000000006,
             310.0,
-            fill="#000000",
+            fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
@@ -165,7 +166,7 @@ class SmartLysimeterSystemHealth():
             220.0,
             775.0,
             310.0,
-            fill="#000000",
+            fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
@@ -173,7 +174,7 @@ class SmartLysimeterSystemHealth():
             330.0,
             495.00000000000006,
             420.0,
-            fill="#000000",
+            fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
@@ -181,7 +182,7 @@ class SmartLysimeterSystemHealth():
             330.0,
             775.0,
             420.0,
-            fill="#000000",
+            fill="#FFF2CC",
             outline="")
 
         self._canvas.create_text(
@@ -237,7 +238,6 @@ class SmartLysimeterSystemHealth():
             fill="#000000",
             font=("RobotoRoman Bold", 18 * -1)
         )
-    def place(self):
-        self._canvas.place(x = 0, y = 0)
     def unplace(self):
+        self._canvas.delete("all")
         self._canvas.place_forget()

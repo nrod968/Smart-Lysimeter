@@ -27,7 +27,6 @@ def init_gui():
     root = Tk()
     home = SmartLysimeterHome(root)
     system_health = SmartLysimeterSystemHealth(root)
-    home.place()
 
     root.geometry("800x480")
     root.configure(bg = "#FFFFFF")
@@ -40,7 +39,7 @@ def init_gui():
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=switch_home(home, system_health),
+        command=lambda: switch_home(home, system_health),
         relief="flat"
     )
     button_1.place(
@@ -104,7 +103,7 @@ def init_gui():
         image=button_image_5,
         borderwidth=0,
         highlightthickness=0,
-        command=switch_system_health(home, system_health),
+        command=lambda: switch_system_health(home, system_health),
         relief="flat"
     )
     button_5.place(
