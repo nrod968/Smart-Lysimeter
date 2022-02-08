@@ -1,6 +1,7 @@
 from os import system
 from pathlib import Path
 from View.gui_home import SmartLysimeterHome
+from View.gui_settings import SmartLysimeterSettings
 from View.gui_system_health import SmartLysimeterSystemHealth
 
 # from tkinter import *
@@ -15,18 +16,26 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-def switch_home(home, system_health):
-    system_health.unplace()
+def switch_home(home, systemHealth, settings):
+    systemHealth.unplace()
+    settings.unplace()
     home.place()
 
-def switch_system_health(home, system_health):
+def switch_system_health(home, systemHealth, settings):
     home.unplace()
-    system_health.place()
+    settings.unplace()
+    systemHealth.place()
+
+def switch_settings(home, systemHealth, settings):
+    home.unplace()
+    systemHealth.unplace()
+    settings.place()
 
 def init_gui():
     root = Tk()
     home = SmartLysimeterHome(root)
-    system_health = SmartLysimeterSystemHealth(root)
+    systemHealth = SmartLysimeterSystemHealth(root)
+    settings = SmartLysimeterSettings(root)
 
     root.geometry("800x480")
     root.configure(bg = "#FFFFFF")
@@ -39,7 +48,7 @@ def init_gui():
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: switch_home(home, system_health),
+        command=lambda: switch_home(home, systemHealth, settings),
         relief="flat"
     )
     button_1.place(
@@ -103,7 +112,7 @@ def init_gui():
         image=button_image_5,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: switch_system_health(home, system_health),
+        command=lambda: switch_system_health(home, systemHealth, settings),
         relief="flat"
     )
     button_5.place(
@@ -119,7 +128,7 @@ def init_gui():
         image=button_image_6,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_6 clicked"),
+        command=lambda: switch_settings(home, systemHealth, settings),
         relief="flat"
     )
     button_6.place(

@@ -35,7 +35,7 @@ class SmartLysimeterHome():
             522.0,
             60.0,
             fill="#D5E8D4",
-            outline="")
+            outline="#82B366")
 
         self._canvas.create_rectangle(
             209.00000000000006,
@@ -43,12 +43,12 @@ class SmartLysimeterHome():
             591.0,
             470.0,
             fill="#D5E8D4",
-            outline="")
+            outline="#82B366")
 
         self._canvas.create_text(
-            277.00000000000006,
-            20.0,
-            anchor="nw",
+            399.5,
+            40.0,
+            anchor="center",
             text="Smart Lysimeter",
             fill="#000000",
             font=("RobotoRoman Bold", 30 * -1)
@@ -63,9 +63,9 @@ class SmartLysimeterHome():
             outline="")
 
         self._canvas.create_text(
-            12.000000000000057,
-            65.0,
-            anchor="nw",
+            118,
+            66.0,
+            anchor="n",
             text="Most Recent Data",
             fill="#000000",
             font=("RobotoRoman Bold", 20 * -1)
@@ -100,17 +100,17 @@ class SmartLysimeterHome():
 
         self._canvas.create_text(
             219.00000000000006,
-            440.0,
-            anchor="nw",
+            455.0,
+            anchor="w",
             text="Date: 01/01/1970",
             fill="#000000",
             font=("RobotoRoman Bold", 22 * -1)
         )
 
         self._canvas.create_text(
-            400.00000000000006,
-            440.0,
-            anchor="nw",
+            581,
+            455,
+            anchor="e",
             text="Time: 00:00 AM",
             fill="#000000",
             font=("RobotoRoman Bold", 22 * -1)

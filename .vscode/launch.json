@@ -14,5 +14,15 @@
             "env": {"PYTHONPATH": "${cwd}"
             }
         }
+        {
+            "name": "Python: main",
+            "type": "python",
+            "request": "launch",
+            "program": "C:/Users/Nathaniel/Documents/_nrod968/School/ENGR 498/Smart-Lysimeter/main.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {"PYTHONPATH": "${cwd}"
+            }
+        }
     ]
 }
