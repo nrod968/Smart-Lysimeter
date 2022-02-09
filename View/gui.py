@@ -16,23 +16,25 @@ class SmartLysimeterView():
     def __init__(self):
         self._root = Tk()
         self._canvas = Canvas(self._root, bg = "#FFFFFF", height = 480, width = 800, bd = 0, highlightthickness = 0, relief = "ridge")
-        self._canvas.place(x = 0, y = 0)
 
         self._home = SmartLysimeterHome()
         self._systemHealth = SmartLysimeterSystemHealth()
         self._settings = SmartLysimeterSettings()
-
-        self._home.place(self._canvas)
         self.init_gui()
     
     def relative_to_assets(self, path: str) -> Path:
         return ASSETS_PATH / Path(path)
 
     def switch_to(self, window: SmartLysimeterWindow):
-        self._canvas.delete("all")
-        window.place(self._canvas)
+        self._canvas.delete("health||settings||home")
+        window.place(self._canvas, self._root)
+        self._currWindow = window
 
     def init_gui(self):
+        self._canvas.place(x = 0, y = 0)
+        self._home.place(self._canvas, self._root)
+        self._currWindow = self._home
+
         self._root.geometry("800x480")
         self._root.configure(bg = "#FFFFFF")
         self._root.wm_title("Smart Lysimeter")
@@ -90,6 +92,18 @@ class SmartLysimeterView():
             command=lambda: self.switch_to(self._settings),
             relief="flat")
         button_6.place(x=12, y=390, width=212, height=30)
+
+        create_filleted_rectangle(self._canvas, 277, 20, 522, 60, cornerRadius=10, fill="#D5E8D4", outline="#82B366", text="Smart Lysimeter", font=("RobotoRoman Bold", 30 * -1), tag="base")
+
+        create_filleted_rectangle(self._canvas, 209, 440, 591, 470, cornerRadius=10, fill="#D5E8D4", outline="#82B366", tag="base")
+        self._canvas.create_text(219, 455, anchor="w", text="Date: 01/01/1970", fill="#000000", font=("RobotoRoman Bold", 22 * -1), tag="base")
+        self._canvas.create_text(581, 455, anchor="e", text="Time: 00:00 AM", fill="#000000", font=("RobotoRoman Bold", 22 * -1), tag="base")
+
+        create_filleted_rectangle(self._canvas, 12, 65, 224, 181, cornerRadius=15, fill="#FFE6CC", outline="#D79B00", tag="base")
+        self._canvas.create_text(118, 68, anchor="n", text="Most Recent Data", fill="#000000", font=("RobotoRoman Bold", 20 * -1), tag="base")
+        self._canvas.create_text(28, 94, anchor="nw", text="pH: ", fill="#000000", font=("RobotoRoman Regular", 18 * -1), tag="base")
+        self._canvas.create_text(28, 123, anchor="nw", text="EC: ", fill="#000000", font=("RobotoRoman Regular", 18 * -1), tag="base")
+        self._canvas.create_text(28, 152, anchor="nw", text="Drainage Rate: ", fill="#000000", font=("RobotoRoman Regular", 18 * -1), tag="base")
         
         self._root.resizable(False, False)
         self._root.mainloop()
