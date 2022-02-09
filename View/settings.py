@@ -3,7 +3,7 @@ from pathlib import Path
 from tkinter import *
 # Explicit imports to satisfy Flake8
 #from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from view.window import SmartLysimeterWindow
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
@@ -12,7 +12,7 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class SmartLysimeterSystemHealth():
+class SmartLysimeterSettings(SmartLysimeterWindow):
     def __init__(self, root):
         self._canvas = Canvas(
             root,
@@ -23,6 +23,7 @@ class SmartLysimeterSystemHealth():
             highlightthickness = 0,
             relief = "ridge"
         )
+        
     def place(self):
         self._canvas.place(x = 0, y = 0)
         self._canvas.create_rectangle(
@@ -132,7 +133,7 @@ class SmartLysimeterSystemHealth():
             505,
             85,
             anchor="center",
-            text="System Health",
+            text="Settings",
             fill="#000000",
             font=("RobotoRoman Bold", 22 * -1)
         )
@@ -141,7 +142,7 @@ class SmartLysimeterSystemHealth():
             235.00000000000006,
             110.0,
             495.00000000000006,
-            200.0,
+            190.0,
             fill="#FFF2CC",
             outline="")
 
@@ -149,39 +150,39 @@ class SmartLysimeterSystemHealth():
             515.0,
             110.0,
             775.0,
+            190.0,
+            fill="#FFF2CC",
+            outline="")
+
+        self._canvas.create_rectangle(
+            235.00000000000006,
             200.0,
-            fill="#FFF2CC",
-            outline="")
-
-        self._canvas.create_rectangle(
-            235.00000000000006,
-            220.0,
             495.00000000000006,
-            310.0,
+            280.0,
             fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
             515.0,
-            220.0,
+            200.0,
             775.0,
-            310.0,
+            280.0,
             fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
             235.00000000000006,
-            330.0,
+            290.0,
             495.00000000000006,
-            420.0,
+            370.0,
             fill="#FFF2CC",
             outline="")
 
         self._canvas.create_rectangle(
             515.0,
-            330.0,
+            290.0,
             775.0,
-            420.0,
+            370.0,
             fill="#FFF2CC",
             outline="")
 
@@ -205,7 +206,7 @@ class SmartLysimeterSystemHealth():
 
         self._canvas.create_text(
             515.0,
-            220.0,
+            200.0,
             anchor="nw",
             text="Input EC Probe Status:",
             fill="#000000",
@@ -214,7 +215,7 @@ class SmartLysimeterSystemHealth():
 
         self._canvas.create_text(
             515.0,
-            330.0,
+            290.0,
             anchor="nw",
             text="Input Pump Status:",
             fill="#000000",
@@ -223,7 +224,7 @@ class SmartLysimeterSystemHealth():
 
         self._canvas.create_text(
             235.00000000000006,
-            220.0,
+            200.0,
             anchor="nw",
             text="Drainage EC Probe Status:",
             fill="#000000",
@@ -232,9 +233,26 @@ class SmartLysimeterSystemHealth():
 
         self._canvas.create_text(
             235.00000000000006,
-            330.0,
+            290.0,
             anchor="nw",
             text="Drainage Pump Status:",
+            fill="#000000",
+            font=("RobotoRoman Bold", 18 * -1)
+        )
+
+        self._canvas.create_rectangle(
+            235.00000000000006,
+            380.0,
+            775.0,
+            420.0,
+            fill="#F8CECC",
+            outline="")
+
+        self._canvas.create_text(
+            505,
+            400,
+            anchor="center",
+            text="Emergency Shut Down",
             fill="#000000",
             font=("RobotoRoman Bold", 18 * -1)
         )

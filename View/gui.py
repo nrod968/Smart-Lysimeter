@@ -1,8 +1,9 @@
 from os import system
 from pathlib import Path
-from View.gui_home import SmartLysimeterHome
-from View.gui_settings import SmartLysimeterSettings
-from View.gui_system_health import SmartLysimeterSystemHealth
+from view.home import SmartLysimeterHome
+from view.settings import SmartLysimeterSettings
+from view.system_health import SmartLysimeterSystemHealth
+from view.window import SmartLysimeterWindow
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -24,7 +25,7 @@ class SmartLysimeterView():
     def relative_to_assets(self, path: str) -> Path:
         return ASSETS_PATH / Path(path)
 
-    def switch_to(self, window):
+    def switch_to(self, window: SmartLysimeterWindow):
         self._currWindow.unplace()
         window.place()
         self._currWindow = window

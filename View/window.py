@@ -1,6 +1,16 @@
-from tkinter import *
+import abc
+class SmartLysimeterWindow(metaclass=abc.ABCMeta):
+    @classmethod
+    def __subclasshook__(cls, subclass):
+        return (hasattr(subclass, 'place') and 
+                callable(subclass.place) and 
+                hasattr(subclass, 'unplace') and 
+                callable(subclass.unplace))
 
-class Window(Frame):
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.master = master
+    @abc.abstractmethod
+    def place(self):
+        raise NotImplementedError
+    
+    @abc.abstractmethod
+    def unplace(self):
+        raise NotImplementedError
