@@ -1,5 +1,5 @@
-# Smart-Lysimeter
-## Team 22042
+# Smart Lysimeter
+### Team 22042
 
 ### Objective:
 To deliver an autonomous, low-cost, and portable lysimeter for use in a greenhouse.
