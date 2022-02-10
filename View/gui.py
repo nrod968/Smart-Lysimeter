@@ -16,6 +16,8 @@ class SmartLysimeterView():
     def __init__(self):
         self._root = Tk()
         self._canvas = Canvas(self._root, bg = "#FFFFFF", height = 480, width = 800, bd = 0, highlightthickness = 0, relief = "ridge")
+        self._dateTxt = StringVar()
+        self._timeTxt = StringVar()
 
         self._home = SmartLysimeterHome()
         self._systemHealth = SmartLysimeterSystemHealth()
@@ -96,8 +98,12 @@ class SmartLysimeterView():
         create_filleted_rectangle(self._canvas, 277, 20, 522, 60, cornerRadius=10, fill="#D5E8D4", outline="#82B366", text="Smart Lysimeter", font=("RobotoRoman Bold", 30 * -1), tag="base")
 
         create_filleted_rectangle(self._canvas, 209, 440, 591, 470, cornerRadius=10, fill="#D5E8D4", outline="#82B366", tag="base")
-        self._canvas.create_text(219, 455, anchor="w", text="Date: 01/01/1970", fill="#000000", font=("RobotoRoman Bold", 22 * -1), tag="base")
-        self._canvas.create_text(581, 455, anchor="e", text="Time: 00:00 AM", fill="#000000", font=("RobotoRoman Bold", 22 * -1), tag="base")
+        self._dateTxt.set("Date: 01/01/1970")
+        dateLbl = Label(self._root, textvariable=self._dateTxt, anchor=W, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1), justify='left')
+        dateLbl.place(x=219, y=441)
+        self._timeTxt.set("Time: 00:00 AM")
+        timeLbl = Label(self._root, textvariable=self._timeTxt, anchor=E, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1), justify='left')
+        timeLbl.place(x=436, y=441)
 
         create_filleted_rectangle(self._canvas, 12, 65, 224, 181, cornerRadius=15, fill="#FFE6CC", outline="#D79B00", tag="base")
         self._canvas.create_text(118, 68, anchor="n", text="Most Recent Data", fill="#000000", font=("RobotoRoman Bold", 20 * -1), tag="base")
