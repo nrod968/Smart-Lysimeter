@@ -1,4 +1,5 @@
 from pathlib import Path
+from re import L
 
 from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -24,3 +25,6 @@ class SmartLysimeterSettings(SmartLysimeterWindow):
         create_filleted_rectangle(canvas, 235, 290, 495, 370, cornerRadius=10, fill="#FFF2CC", outline="#D6B656", text="Drainage EC Probe Status:", font=("RobotoRoman Bold", 18 * -1), tag=("settings"))
         create_filleted_rectangle(canvas, 515, 290, 775, 370, cornerRadius=10, fill="#FFF2CC", outline="#D6B656", text="Drainage Pump Status:", font=("RobotoRoman Bold", 18 * -1), tag=("settings"))
         create_filleted_rectangle(canvas, 235, 380, 775, 420, cornerRadius=10, fill="#F8CECC", outline="#B85450", text="Emergency Shut Down", font=("RobotoRoman Bold", 18 * -1), tag=("settings"))
+    
+    def unplace(self):
+        pass

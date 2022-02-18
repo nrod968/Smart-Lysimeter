@@ -17,3 +17,6 @@ def relative_to_assets(path: str) -> Path:
 class SmartLysimeterHome(SmartLysimeterWindow):
     def place(self, canvas: Canvas, root: Tk):
         pass
+    
+    def unplace(self):
+        pass
