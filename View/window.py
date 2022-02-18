@@ -12,3 +12,7 @@ class SmartLysimeterWindow(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def place(self):
         raise NotImplementedError
+    
+    @abc.abstractmethod
+    def unplace(self):
+        raise NotImplementedError

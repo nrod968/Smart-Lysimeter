@@ -33,6 +33,7 @@ class SmartLysimeterView():
     def switch_to(self, window: SmartLysimeterWindow):
         self._canvas.delete("health||settings||home")
         window.place(self._canvas, self._root)
+        self._currWindow.unplace()
         self._currWindow = window
 
     def init_gui(self):
