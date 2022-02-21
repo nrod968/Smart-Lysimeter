@@ -1,4 +1,11 @@
 from tkinter import *
+from pathlib import Path
+
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
 
 def create_filleted_rectangle(canvas: Canvas, x0, y0, x1, y1, cornerRadius, fill='', outline='', text="", font=None, tag=""):
         points = [
