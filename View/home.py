@@ -14,13 +14,14 @@ class SmartLysimeterHome(SmartLysimeterWindow):
         self._graphFrame = Frame()
         self._toolbarFrame = Frame()
         fig = Figure(figsize=(5, 3.75), dpi=100, tight_layout = True)
+        fig.suptitle("Hello World!")
         #fig.add_axes()
 
         # list of squares
         y = [i**2 for i in range(101)]
 
         # adding the subplot
-        plot1 = fig.add_subplot(111, ylabel="Hello", xlabel="World", title="Hello World!")
+        plot1 = fig.add_subplot(111, ylabel="Hello", xlabel="World")
 
         # plotting the graph
         plot1.plot(y)
