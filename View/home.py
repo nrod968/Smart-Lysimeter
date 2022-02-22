@@ -41,4 +41,4 @@ class SmartLysimeterHome(SmartLysimeterWindow):
         # toolbar.update()
 
     def unplace(self):
-        pass
+        self._graphFrame.place_forget()
