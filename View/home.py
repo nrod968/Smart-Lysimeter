@@ -1,6 +1,8 @@
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import *
+from matplotlib.axes import Axes
+from matplotlib.axis import Axis
 
 from matplotlib.pyplot import tight_layout, xlabel, ylabel
 from view.window import SmartLysimeterWindow
@@ -18,13 +20,18 @@ class SmartLysimeterHome(SmartLysimeterWindow):
         #fig.add_axes()
 
         # list of squares
+        x = [i for i in range(101)]
         y = [i**2 for i in range(101)]
+        y2 = [i**3 for i in range(101)]
 
         # adding the subplot
-        plot1 = fig.add_subplot(111, ylabel="Hello", xlabel="World")
-
-        # plotting the graph
-        plot1.plot(y)
+        plot1 = fig.add_subplot(111)
+        plot1.plot(x, y, color="orange")
+        plot1.set_ylabel("i^2", color="orange")
+        plot1.set_xlabel("i", color="blue")
+        plot2 = plot1.twinx()
+        plot2.plot(x, y2, color="purple")
+        plot2.set_ylabel("i^3", color="purple")
 
         # creating the Tkinter canvas
         # containing the Matplotlib figure
