@@ -1,27 +1,33 @@
+from enum import Enum
 from tinydb import TinyDB, Query
 import csv
 
+class Fieldnames(Enum):
+    TIMESTAMP = "Timestamp"
+    PH = "pH"
+    EC = "EC"
+    DRAINAGE = "Drainage Rate"
 class SmartLysimeterModel():
-    fieldnames = ["date_time", "pH", "EC", "Drainage Rate"]
-    def __init__(self, dbFileName, csvFileName, numRecords=10):
+    fieldnames = [Fieldnames.TIMESTAMP, Fieldnames.PH, Fieldnames.EC, Fieldnames.DRAINAGE]
+    def __init__(self, dbFileName, csvFileName, historyLength=10):
         self._lastDataPoint = {}
         self._lastNDataPoints = {}
-        self._numRecords = numRecords
+        self._historyLength = historyLength
         self._db = TinyDB(dbFileName)
         self._csvFileName = csvFileName
         self._currRecord = 0
 
-    def set_num_records(self, num_records):
-        self._numRecords = num_records
+    def set_history_length(self, historyLength):
+        self._historyLength = historyLength
 
-    def get_num_records(self):
-        return self._numRecords
+    def get_history_length(self):
+        return self._historyLength
 
-    def record_data_point(self, dateTime, phReading, ecReading, drainageReading):
-        self._lastDataPoint =  {"date_time": dateTime,
-                                "pH": phReading,
-                                "EC": ecReading,
-                                "Drainage Rate": drainageReading}
+    def record_data_point(self, timestamp, phReading, ecReading, drainageReading):
+        self._lastDataPoint =  {Fieldnames.TIMESTAMP: timestamp,
+                                Fieldnames.PH: phReading,
+                                Fieldnames.EC: ecReading,
+                                Fieldnames.DRAINAGE: drainageReading}
         self.save_last_reading_csv()
         self.save_last_reading_db()
 
@@ -36,10 +42,10 @@ class SmartLysimeterModel():
     def get_last_reading(self):
         return self._lastDataPoint
 
-    def get_last_n_readings(self):
+    def get_history(self):
         readings = []
-        for i in range(self._numRecords):
-            if (i > self._numRecords):
+        for i in range(self._historyLength):
+            if (i > self._currRecord):
                 break
             readings.append(self._db.get(doc_id=(self._currRecord - i)))
         readings.reverse()
