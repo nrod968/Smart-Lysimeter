@@ -1,4 +1,3 @@
-from typing import Dict
 from model.model import SmartLysimeterModel, Fieldnames
 class SmartLysimeterController():
     def __init__(self, model: SmartLysimeterModel):
