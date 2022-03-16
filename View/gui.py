@@ -1,5 +1,6 @@
 from os import system
 from pathlib import Path
+from controller.controller import SmartLysimeterController
 from view.home import SmartLysimeterHome
 from view.settings import SmartLysimeterSettings
 from view.system_health import SmartLysimeterSystemHealth
@@ -13,7 +14,7 @@ OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
 class SmartLysimeterView():
-    def __init__(self):
+    def __init__(self, controller: SmartLysimeterController):
         self._root = Tk()
         self._canvas = Canvas(self._root, bg = "#FFFFFF", height = 480, width = 800, bd = 0, highlightthickness = 0, relief = "ridge")
         self._dateTxt = StringVar()
@@ -21,6 +22,7 @@ class SmartLysimeterView():
         self._phTxt = StringVar()
         self._ecTxt = StringVar()
         self._drainageTxt = StringVar()
+        self._controller = controller
 
         self._home = SmartLysimeterHome()
         self._systemHealth = SmartLysimeterSystemHealth()
@@ -59,7 +61,7 @@ class SmartLysimeterView():
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self._home.foobar(),
             relief="flat")
         button_2.place(x=12, y=230, width=212, height=30)
 
