@@ -23,14 +23,12 @@ class SmartLysimeterView():
         self._ecTxt = StringVar()
         self._drainageTxt = StringVar()
         self._controller = controller
+        self._historyLength = self._controller.get_history_length()
 
-        self._home = SmartLysimeterHome()
+        self._home = SmartLysimeterHome(self._historyLength)
         self._systemHealth = SmartLysimeterSystemHealth()
         self._settings = SmartLysimeterSettings()
         self.init_gui()
-    
-    def relative_to_assets(self, path: str) -> Path:
-        return ASSETS_PATH / Path(path)
 
     def switch_to(self, window: SmartLysimeterWindow):
         self._canvas.delete("health||settings||home")
@@ -61,7 +59,7 @@ class SmartLysimeterView():
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self._home.foobar(),
+            command=lambda: print("button_2 clicked"),
             relief="flat")
         button_2.place(x=12, y=230, width=212, height=30)
 
@@ -126,3 +124,6 @@ class SmartLysimeterView():
         
         self._root.resizable(False, False)
         self._root.mainloop()
+
+    def relative_to_assets(self, path: str) -> Path:
+        return ASSETS_PATH / Path(path)
