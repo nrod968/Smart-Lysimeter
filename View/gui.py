@@ -1,7 +1,8 @@
 from os import system
 from pathlib import Path
 from controller.controller import SmartLysimeterController
-from view.home import SmartLysimeterHome
+from view.home import SmartLysimeterPlotWindow
+from view.ph_window import SmartLysimeterPhWindow
 from view.settings import SmartLysimeterSettings
 from view.system_health import SmartLysimeterSystemHealth
 from view.window import SmartLysimeterWindow
@@ -25,13 +26,16 @@ class SmartLysimeterView():
         self._controller = controller
         self._historyLength = self._controller.get_history_length()
 
-        self._home = SmartLysimeterHome(self._historyLength)
+        self._home = SmartLysimeterPlotWindow(self._historyLength, "pH", "EC")
         self._systemHealth = SmartLysimeterSystemHealth()
         self._settings = SmartLysimeterSettings()
+        self._phWindow = SmartLysimeterPlotWindow(self._historyLength, "pH")
+        self._ecWindow = SmartLysimeterPlotWindow(self._historyLength, "EC")
+        self._drainageWindow = SmartLysimeterPlotWindow(self._historyLength, "Drainage Rate")
         self.init_gui()
 
     def switch_to(self, window: SmartLysimeterWindow):
-        self._canvas.delete("health||settings||home")
+        self._canvas.delete("health||settings||home||pH||EC||drainage")
         window.place(self._canvas, self._root)
         self._currWindow.unplace()
         self._currWindow = window
@@ -59,7 +63,7 @@ class SmartLysimeterView():
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.switch_to(self._phWindow),
             relief="flat")
         button_2.place(x=12, y=230, width=212, height=30)
 
@@ -68,7 +72,7 @@ class SmartLysimeterView():
             image=button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=lambda: self.switch_to(self._ecWindow),
             relief="flat")
         button_3.place(x=12, y=270, width=212, height=30)
 
@@ -77,7 +81,7 @@ class SmartLysimeterView():
             image=button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            command=lambda: self.switch_to(self._drainageWindow),
             relief="flat")
         button_4.place(x=12, y=310, width=212, height=30)
 
