@@ -45,7 +45,7 @@ class SmartLysimeterModel():
     def get_history(self):
         readings = []
         for i in range(self._historyLength):
-            if (i > self._currRecord):
+            if (i >= self._currRecord):
                 break
             readings.append(self._db.get(doc_id=(self._currRecord - i)))
         readings.reverse()

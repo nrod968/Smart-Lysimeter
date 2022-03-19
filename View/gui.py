@@ -9,7 +9,6 @@ from utils.gui_tools import *
 
 from tkinter import *
 
-
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
@@ -25,12 +24,12 @@ class SmartLysimeterView():
         self._controller = controller
         self._historyLength = self._controller.get_history_length()
 
-        self._home = SmartLysimeterPlotWindow(self._historyLength, "pH", "EC")
+        self._home = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), "pH", self._controller.get_pH_history(), "EC", self._controller.get_EC_history())
         self._systemHealth = SmartLysimeterSystemHealth()
         self._settings = SmartLysimeterSettings()
-        self._phWindow = SmartLysimeterPlotWindow(self._historyLength, "pH")
-        self._ecWindow = SmartLysimeterPlotWindow(self._historyLength, "EC")
-        self._drainageWindow = SmartLysimeterPlotWindow(self._historyLength, "Drainage Rate")
+        self._phWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), "pH", self._controller.get_pH_history())
+        self._ecWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), "EC", self._controller.get_EC_history())
+        self._drainageWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), "Drainage Rate", self._controller.get_drainage_history())
         self.init_gui()
 
     def switch_to(self, window: SmartLysimeterWindow):
