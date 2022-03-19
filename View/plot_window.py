@@ -10,7 +10,7 @@ from utils.gui_tools import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
-class SmartLysimeterHome(SmartLysimeterDataWindow):
+class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
     def __init__(self, historyLength, dataName1, dataName2=None):
         self._timestamps = [i for i in range(101)]
         self._data1 = [i**2 for i in range(101)]
