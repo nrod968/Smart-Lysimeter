@@ -27,6 +27,7 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._historyLength = historyLength
         self._fig = Figure(figsize=(5, 3.75), dpi=100, tight_layout = True)
         self._fig.suptitle("Hello World!")
+        self._isCurrWindow = False
 
         # adding the subplot
         self._plot1 = self._fig.add_subplot(111)
@@ -45,6 +46,7 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._canvas = FigureCanvasTkAgg(self._fig, master=self._graphFrame)
     
     def place(self, canvas: Canvas, root: Tk):
+        self._isCurrWindow = True
         self._canvas.draw()
 
         # placing the canvas on the Tkinter window
@@ -52,19 +54,18 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._graphFrame.place(x=260, y=65)
 
     def unplace(self):
+        self._isCurrWindow = False
         self._graphFrame.place_forget()
 
-    def add_data_point(self, phData, ecData, timestamp):
+    def add_data_point(self, timestamp, data1, data2=None):
         self._timestamps.append(timestamp)
-        self._data1.append(phData)
-        if(self._isData2):
-            self._data2.append(ecData)
+        self._data1.append(data1)
+        if(self._isData2): self._data2.append(data2)
 
         if (len(self._timestamps) > self._historyLength):
             self._timestamps.pop(0)
             self._data1.pop(0)
-            if (self._isData2):
-                self._data2.pop(0)
+            if (self._isData2): self._data2.pop(0)
         
         self._line1.set_ydata(self._data1)
         self._line1.set_xdata(self._timestamps)
@@ -75,29 +76,27 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
             self._line2.set_xdata(self._timestamps)
             self._plot2.relim()
             self._plot2.autoscale_view()
+        if (self._isCurrWindow):
+            self._fig.canvas.draw()
+            self._fig.canvas.flush_events()
 
-        self._fig.canvas.draw()
-        self._fig.canvas.flush_events()
-
-    def set_history_length(self, historyLength):
+    def set_history_length(self, historyLength, timestamps, data1, data2=None):
         self._historyLength = historyLength
 
-        if (len(self._timestamps) > self._historyLength):
-            for _ in range(len(self._timestamps) - self._historyLength):
-                self._timestamps.pop(0)
-                self._data1.pop(0)
-                if (self._isData2):
-                    self._data2.pop(0)
-            self._line1.set_ydata(self._data1)
-            self._line1.set_xdata(self._timestamps)
-            self._plot1.relim()
-            self._plot1.autoscale_view()
+        self._data1 = data1
+        self._timestamps = timestamps
+        self._line1.set_ydata(self._data1)
+        self._line1.set_xdata(self._timestamps)
+        self._plot1.relim()
+        self._plot1.autoscale_view()
 
-            if(self._isData2):
-                self._line2.set_ydata(self._data2)
-                self._line2.set_xdata(self._timestamps)
-                self._plot2.relim()
-                self._plot2.autoscale_view()
+        if (self._isData2):
+            self._data2 = data2
+            self._line2.set_ydata(self._data2)
+            self._line2.set_xdata(self._timestamps)
+            self._plot2.relim()
+            self._plot2.autoscale_view()
 
+        if (self._isCurrWindow):
             self._fig.canvas.draw()
             self._fig.canvas.flush_events()
