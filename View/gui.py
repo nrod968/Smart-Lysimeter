@@ -1,19 +1,21 @@
+from dataclasses import Field
 from os import system
 from pathlib import Path
-from view.home import SmartLysimeterHome
+from controller.controller import SmartLysimeterController
+from view.plot_window import SmartLysimeterPlotWindow
 from view.settings import SmartLysimeterSettings
 from view.system_health import SmartLysimeterSystemHealth
 from view.window import SmartLysimeterWindow
 from utils.gui_tools import *
+from model.model import Fieldnames
 
 from tkinter import *
-
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
 class SmartLysimeterView():
-    def __init__(self):
+    def __init__(self, controller: SmartLysimeterController):
         self._root = Tk()
         self._canvas = Canvas(self._root, bg = "#FFFFFF", height = 480, width = 800, bd = 0, highlightthickness = 0, relief = "ridge")
         self._dateTxt = StringVar()
@@ -21,20 +23,45 @@ class SmartLysimeterView():
         self._phTxt = StringVar()
         self._ecTxt = StringVar()
         self._drainageTxt = StringVar()
+        self._controller = controller
+        self._historyLength = self._controller.get_history_length()
 
-        self._home = SmartLysimeterHome()
+        self._home = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH, self._controller.get_pH_history(), Fieldnames.EC, self._controller.get_EC_history())
         self._systemHealth = SmartLysimeterSystemHealth()
         self._settings = SmartLysimeterSettings()
+        self._phWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH, self._controller.get_pH_history())
+        self._ecWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.EC, self._controller.get_EC_history())
+        self._drainageWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.DRAINAGE, self._controller.get_drainage_history())
         self.init_gui()
-    
-    def relative_to_assets(self, path: str) -> Path:
-        return ASSETS_PATH / Path(path)
 
     def switch_to(self, window: SmartLysimeterWindow):
-        self._canvas.delete("health||settings||home")
+        self._canvas.delete("health||settings||home||pH||EC||drainage")
         window.place(self._canvas, self._root)
         self._currWindow.unplace()
         self._currWindow = window
+
+    def add_data_point(self):
+        reading = self._controller.get_last_reading()
+        self._home.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.PH], reading[Fieldnames.EC])
+        self._phWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.PH])
+        self._ecWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.EC])
+        self._drainageWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.DRAINAGE])
+
+        self._phTxt.set("pH: " + reading[Fieldnames.PH])
+        self._ecTxt.set("EC: " + reading[Fieldnames.EC])
+        self._drainageTxt.set("Drainage Rate: " + reading[Fieldnames.DRAINAGE])
+
+    def set_history_length(self):
+        self._historyLength = self._controller.get_history_length
+        timestamps = self._controller.get_timestamp_history()
+        ph = self._controller.get_pH_history()
+        ec = self._controller.get_EC_history()
+        drainage = self._controller.get_drainage_history()
+        
+        self._home.set_history_length(self._historyLength, timestamps, ph, ec)
+        self._phWindow.set_history_length(self._historyLength, timestamps, ph)
+        self._ecWindow.set_history_length(self._historyLength, timestamps, ec)
+        self._drainageWindow.set_history_length(self._historyLength, timestamps, drainage)
 
     def init_gui(self):
         self._canvas.place(x = 0, y = 0)
@@ -59,7 +86,7 @@ class SmartLysimeterView():
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.switch_to(self._phWindow),
             relief="flat")
         button_2.place(x=12, y=230, width=212, height=30)
 
@@ -68,7 +95,7 @@ class SmartLysimeterView():
             image=button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=lambda: self.switch_to(self._ecWindow),
             relief="flat")
         button_3.place(x=12, y=270, width=212, height=30)
 
@@ -77,7 +104,7 @@ class SmartLysimeterView():
             image=button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            command=lambda: self.switch_to(self._drainageWindow),
             relief="flat")
         button_4.place(x=12, y=310, width=212, height=30)
 
@@ -124,3 +151,6 @@ class SmartLysimeterView():
         
         self._root.resizable(False, False)
         self._root.mainloop()
+
+    def relative_to_assets(self, path: str) -> Path:
+        return ASSETS_PATH / Path(path)

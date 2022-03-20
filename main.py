@@ -4,7 +4,7 @@ from model.model import SmartLysimeterModel
 from view.gui import SmartLysimeterView
 
 def main():
-    view = SmartLysimeterView()
-    model = SmartLysimeterModel()
+    model = SmartLysimeterModel("db.json", "data.csv")
     controller = SmartLysimeterController(model)
+    view = SmartLysimeterView(controller)
 main()
