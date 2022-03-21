@@ -11,17 +11,17 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
-    def __init__(self, historyLength, timestamps, dataName1, data1, dataName2=None, data2=None):
+    def __init__(self, historyLength, timestamps, dataName1: str, data1, dataName2=None, data2=None):
         if(timestamps is not None): self._timestamps = timestamps
         else: self._timestamps = []
         if(data1 is not None): self._data1 = data1
         else: self._data1 = []
-        self._dataName1 = dataName1
+        self._dataName1 = str(dataName1)
         self._isData2 = dataName2 is not None
         if (self._isData2):
             if(data2 is not None): self._data2 = data2
             else: self._data2 = []
-            self._dataName2 = dataName2
+            self._dataName2 = str(dataName2)
         self._graphFrame = Frame()
         self._toolbarFrame = Frame()
         self._historyLength = historyLength

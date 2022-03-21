@@ -1,21 +1,24 @@
-from enum import Enum
+from enum import Enum, auto
 from tinydb import TinyDB, Query
 import csv
 
 from utils.observer import Observable
 
-class Fieldnames(Enum):
+class Fieldnames(str, Enum):
     TIMESTAMP = "Timestamp"
     PH = "pH"
     EC = "EC"
     DRAINAGE = "Drainage Rate"
 
+    def __str__(self) -> str:
+        return str.__str__(self)
+
 class SmartLysimeterMessage(Enum):
-    HISTORY_LEN_CHANGED = 0
-    NEW_READING = 1
+    HISTORY_LEN_CHANGED = auto()
+    NEW_READING = auto()
 
 class SmartLysimeterModel(Observable):
-    fieldnames = [Fieldnames.TIMESTAMP, Fieldnames.PH, Fieldnames.EC, Fieldnames.DRAINAGE]
+    fieldnames = [str(el) for el in Fieldnames]
     def __init__(self, dbFileName, csvFileName, historyLength=10):
         super().__init__()
         self._lastDataPoint = {}

@@ -1,6 +1,5 @@
 from os import system
 from pathlib import Path
-from readline import set_history_length
 from controller.controller import SmartLysimeterController
 from utils.observer import Observer
 from view.plot_window import SmartLysimeterPlotWindow
