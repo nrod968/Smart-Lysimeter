@@ -1,7 +1,7 @@
-from dataclasses import Field
 from os import system
 from pathlib import Path
 from controller.controller import SmartLysimeterController
+from utils.observer import Observer
 from view.plot_window import SmartLysimeterPlotWindow
 from view.settings import SmartLysimeterSettings
 from view.system_health import SmartLysimeterSystemHealth
@@ -14,7 +14,7 @@ from tkinter import *
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
-class SmartLysimeterView():
+class SmartLysimeterView(Observer):
     def __init__(self, controller: SmartLysimeterController):
         self._root = Tk()
         self._canvas = Canvas(self._root, bg = "#FFFFFF", height = 480, width = 800, bd = 0, highlightthickness = 0, relief = "ridge")
@@ -39,6 +39,9 @@ class SmartLysimeterView():
         window.place(self._canvas, self._root)
         self._currWindow.unplace()
         self._currWindow = window
+
+    def update(self, message):
+        pass
 
     def add_data_point(self):
         reading = self._controller.get_last_reading()

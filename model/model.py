@@ -2,14 +2,17 @@ from enum import Enum
 from tinydb import TinyDB, Query
 import csv
 
+from utils.observer import Observable
+
 class Fieldnames(Enum):
     TIMESTAMP = "Timestamp"
     PH = "pH"
     EC = "EC"
     DRAINAGE = "Drainage Rate"
-class SmartLysimeterModel():
+class SmartLysimeterModel(Observable):
     fieldnames = [Fieldnames.TIMESTAMP, Fieldnames.PH, Fieldnames.EC, Fieldnames.DRAINAGE]
     def __init__(self, dbFileName, csvFileName, historyLength=10):
+        super().__init__()
         self._lastDataPoint = {}
         self._lastNDataPoints = {}
         self._historyLength = historyLength
