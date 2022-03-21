@@ -9,6 +9,11 @@ class Fieldnames(Enum):
     PH = "pH"
     EC = "EC"
     DRAINAGE = "Drainage Rate"
+
+class SmartLysimeterMessage(Enum):
+    HISTORY_LEN_CHANGED = 0
+    NEW_READING = 1
+
 class SmartLysimeterModel(Observable):
     fieldnames = [Fieldnames.TIMESTAMP, Fieldnames.PH, Fieldnames.EC, Fieldnames.DRAINAGE]
     def __init__(self, dbFileName, csvFileName, historyLength=10):
@@ -22,6 +27,7 @@ class SmartLysimeterModel(Observable):
 
     def set_history_length(self, historyLength):
         self._historyLength = historyLength
+        self.notify(SmartLysimeterMessage.HISTORY_LEN_CHANGED)
 
     def get_history_length(self):
         return self._historyLength
@@ -33,6 +39,7 @@ class SmartLysimeterModel(Observable):
                                 Fieldnames.DRAINAGE: drainageReading}
         self.save_last_reading_csv()
         self.save_last_reading_db()
+        self.notify(SmartLysimeterMessage.NEW_READING)
 
     def save_last_reading_csv(self):
         with open(self._csvFileName, 'w', newline='') as csvfile:

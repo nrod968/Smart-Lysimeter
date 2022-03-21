@@ -1,5 +1,6 @@
 from os import system
 from pathlib import Path
+from readline import set_history_length
 from controller.controller import SmartLysimeterController
 from utils.observer import Observer
 from view.plot_window import SmartLysimeterPlotWindow
@@ -7,7 +8,7 @@ from view.settings import SmartLysimeterSettings
 from view.system_health import SmartLysimeterSystemHealth
 from view.window import SmartLysimeterWindow
 from utils.gui_tools import *
-from model.model import Fieldnames
+from model.model import Fieldnames, SmartLysimeterMessage
 
 from tkinter import *
 
@@ -41,7 +42,10 @@ class SmartLysimeterView(Observer):
         self._currWindow = window
 
     def update(self, message):
-        pass
+        if (message is SmartLysimeterMessage.HISTORY_LEN_CHANGED):
+            self.set_history_length()
+        elif (message is SmartLysimeterMessage.NEW_READING):
+            self.add_data_point()
 
     def add_data_point(self):
         reading = self._controller.get_last_reading()
