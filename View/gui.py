@@ -7,7 +7,7 @@ from view.settings import SmartLysimeterSettings
 from view.system_health import SmartLysimeterSystemHealth
 from view.window import SmartLysimeterWindow
 from utils.gui_tools import *
-from model.model import Fieldnames, SmartLysimeterMessage
+from model.model import Fieldnames, SmartLysimeterMessage, SmartLysimeterModel
 
 from tkinter import *
 
@@ -15,7 +15,8 @@ OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
 class SmartLysimeterView(Observer):
-    def __init__(self, controller: SmartLysimeterController):
+    def __init__(self, controller: SmartLysimeterController, model: SmartLysimeterModel):
+        model.register(self)
         self._root = Tk()
         self._canvas = Canvas(self._root, bg = "#FFFFFF", height = 480, width = 800, bd = 0, highlightthickness = 0, relief = "ridge")
         self._dateTxt = StringVar()
@@ -53,9 +54,9 @@ class SmartLysimeterView(Observer):
         self._ecWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.EC])
         self._drainageWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.DRAINAGE])
 
-        self._phTxt.set("pH: " + reading[Fieldnames.PH])
-        self._ecTxt.set("EC: " + reading[Fieldnames.EC])
-        self._drainageTxt.set("Drainage Rate: " + reading[Fieldnames.DRAINAGE])
+        self._phTxt.set("pH: {0:.3g}".format(reading[Fieldnames.PH]))
+        self._ecTxt.set("EC: {0:.3g}".format(reading[Fieldnames.EC]))
+        self._drainageTxt.set("Drainage Rate: {0:.3g}".format(reading[Fieldnames.DRAINAGE]))
 
     def set_history_length(self):
         self._historyLength = self._controller.get_history_length
