@@ -1,15 +1,26 @@
-from enum import Enum
+from enum import Enum, auto
 from tinydb import TinyDB, Query
 import csv
 
-class Fieldnames(Enum):
+from utils.observer import Observable
+
+class Fieldnames(str, Enum):
     TIMESTAMP = "Timestamp"
     PH = "pH"
     EC = "EC"
     DRAINAGE = "Drainage Rate"
-class SmartLysimeterModel():
-    fieldnames = [Fieldnames.TIMESTAMP, Fieldnames.PH, Fieldnames.EC, Fieldnames.DRAINAGE]
+
+    def __str__(self) -> str:
+        return str.__str__(self)
+
+class SmartLysimeterMessage(Enum):
+    HISTORY_LEN_CHANGED = auto()
+    NEW_READING = auto()
+
+class SmartLysimeterModel(Observable):
+    fieldnames = [str(el) for el in Fieldnames]
     def __init__(self, dbFileName, csvFileName, historyLength=10):
+        super().__init__()
         self._lastDataPoint = {}
         self._lastNDataPoints = {}
         self._historyLength = historyLength
@@ -19,17 +30,19 @@ class SmartLysimeterModel():
 
     def set_history_length(self, historyLength):
         self._historyLength = historyLength
+        self.notify(SmartLysimeterMessage.HISTORY_LEN_CHANGED)
 
     def get_history_length(self):
         return self._historyLength
 
     def record_data_point(self, timestamp, phReading, ecReading, drainageReading):
-        self._lastDataPoint =  {Fieldnames.TIMESTAMP: timestamp,
-                                Fieldnames.PH: phReading,
-                                Fieldnames.EC: ecReading,
-                                Fieldnames.DRAINAGE: drainageReading}
+        self._lastDataPoint =  {str(Fieldnames.TIMESTAMP): timestamp,
+                                str(Fieldnames.PH): phReading,
+                                str(Fieldnames.EC): ecReading,
+                                str(Fieldnames.DRAINAGE): drainageReading}
         self.save_last_reading_csv()
         self.save_last_reading_db()
+        self.notify(SmartLysimeterMessage.NEW_READING)
 
     def save_last_reading_csv(self):
         with open(self._csvFileName, 'w', newline='') as csvfile:
