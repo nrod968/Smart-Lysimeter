@@ -36,10 +36,10 @@ class SmartLysimeterModel(Observable):
         return self._historyLength
 
     def record_data_point(self, timestamp, phReading, ecReading, drainageReading):
-        self._lastDataPoint =  {Fieldnames.TIMESTAMP: timestamp,
-                                Fieldnames.PH: phReading,
-                                Fieldnames.EC: ecReading,
-                                Fieldnames.DRAINAGE: drainageReading}
+        self._lastDataPoint =  {str(Fieldnames.TIMESTAMP): timestamp,
+                                str(Fieldnames.PH): phReading,
+                                str(Fieldnames.EC): ecReading,
+                                str(Fieldnames.DRAINAGE): drainageReading}
         self.save_last_reading_csv()
         self.save_last_reading_db()
         self.notify(SmartLysimeterMessage.NEW_READING)
