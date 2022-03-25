@@ -33,7 +33,7 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._plot1 = self._fig.add_subplot(111)
         self._line1, = self._plot1.plot(self._timestamps, self._data1, color="orange")
         self._plot1.set_ylabel(self._dataName1, color="orange")
-        self._plot1.set_xlabel("i", color="blue")
+        #self._plot1.set_xlabel("i", color="blue")
         if (self._isData2):
             self._plot2 = self._plot1.twinx()
             self._line2, = self._plot2.plot(self._timestamps, self._data2, color="purple")

@@ -18,7 +18,7 @@ def collect_data(model):
 def main():
     model = SmartLysimeterModel("db.json", "data.csv")
     controller = SmartLysimeterController(model)
-    dataThread = threading.Thread(target=collect_data, args=(model,), daemon=True)
+    dataThread = threading.Thread(target=collect_data, args=(controller,), daemon=True)
     dataThread.start()
     view = SmartLysimeterView(controller, model)
 main()

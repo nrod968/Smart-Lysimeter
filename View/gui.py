@@ -36,9 +36,11 @@ class SmartLysimeterView(Observer):
         self.init_gui()
 
     def switch_to(self, window: SmartLysimeterWindow):
+        if (window == self._currWindow):
+            pass
         self._canvas.delete("health||settings||home||pH||EC||drainage")
-        window.place(self._canvas, self._root)
         self._currWindow.unplace()
+        window.place(self._canvas, self._root)
         self._currWindow = window
 
     def update(self, message):
