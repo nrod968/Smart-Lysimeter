@@ -1,7 +1,15 @@
+from datetime import datetime
 from model.model import SmartLysimeterModel, Fieldnames
 class SmartLysimeterController():
     def __init__(self, model: SmartLysimeterModel):
         self._model = model
+
+    def record_data_point(self, timestamp, phReading, ecReading, drainageReading):
+        if (isinstance(timestamp, float)):
+            timestamp = datetime.fromtimestamp(timestamp)
+        if (isinstance(timestamp, datetime)):
+            timestamp = (timestamp.replace(microsecond=0)).isoformat()
+        self._model.record_data_point(timestamp, phReading, ecReading, drainageReading)
 
     def get_history_length(self) -> int:
         return self._model.get_history_length()
@@ -9,7 +17,9 @@ class SmartLysimeterController():
         self._model.set_history_length(historyLength)
 
     def get_last_reading(self):
-        return self._model.get_last_reading()
+        reading = self._model.get_last_reading()
+        reading[Fieldnames.TIMESTAMP] = datetime.fromisoformat(reading[Fieldnames.TIMESTAMP])
+        return reading
     def get_last_pH_reading(self) -> float:
         reading = self._model.get_last_reading()
         return reading[Fieldnames.PH]
@@ -21,10 +31,13 @@ class SmartLysimeterController():
         return reading[Fieldnames.DRAINAGE]
     def get_timestamp_last_reading(self):
         reading = self._model.get_last_reading()
-        return reading[Fieldnames.TIMESTAMP]
+        return datetime.fromisoformat(reading[Fieldnames.TIMESTAMP])
     
     def get_history(self):
-        return self._model.get_history()
+        readings = self._model.get_history()
+        for reading in readings:
+            reading[Fieldnames.TIMESTAMP] = datetime.fromisoformat(reading[Fieldnames.TIMESTAMP])
+        return readings
     def get_pH_history(self) -> float:
         readings = self._model.get_history()
         phReadings = []
@@ -47,5 +60,5 @@ class SmartLysimeterController():
         readings = self._model.get_history()
         timestampReadings = []
         for reading in readings:
-            timestampReadings.append(reading[Fieldnames.TIMESTAMP])
+            timestampReadings.append(datetime.fromisoformat(reading[Fieldnames.TIMESTAMP]))
         return timestampReadings

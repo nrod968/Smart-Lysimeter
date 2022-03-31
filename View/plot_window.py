@@ -1,8 +1,10 @@
 # from tkinter import *
 # Explicit imports to satisfy Flake8
+import imp
 from tkinter import *
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
+from matplotlib.dates import DateFormatter
 
 from matplotlib.pyplot import tight_layout, xlabel, ylabel
 from view.data_window import SmartLysimeterDataWindow
@@ -25,19 +27,22 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._graphFrame = Frame()
         self._toolbarFrame = Frame()
         self._historyLength = historyLength
-        self._fig = Figure(figsize=(5, 3.75), dpi=100, tight_layout = True)
+        self._fig = Figure(figsize=(5.75, 3.75), dpi=100, tight_layout = True)
         self._fig.suptitle("Hello World!")
         self._isCurrWindow = False
 
         # adding the subplot
         self._plot1 = self._fig.add_subplot(111)
-        self._line1, = self._plot1.plot(self._timestamps, self._data1, color="orange")
-        self._plot1.set_ylabel(self._dataName1, color="orange")
-        self._plot1.set_xlabel("i", color="blue")
+        self._line1, = self._plot1.plot(self._timestamps, self._data1, color="blue", marker='o')
+        self._plot1.set_ylabel(self._dataName1, color="blue")
+        self._plot1.set_xlabel("i", color="black")
+        self._plot1.tick_params(axis='x', labelrotation=45)
+        xfmt = DateFormatter('%H:%M:%S')
+        self._plot1.xaxis.set_major_formatter(xfmt)
         if (self._isData2):
             self._plot2 = self._plot1.twinx()
-            self._line2, = self._plot2.plot(self._timestamps, self._data2, color="purple")
-            self._plot2.set_ylabel(self._dataName2, color="purple")
+            self._line2, = self._plot2.plot(self._timestamps, self._data2, color="green", marker='o')
+            self._plot2.set_ylabel(self._dataName2, color="green")
 
         self._plot1.set_autoscaley_on(True)
 
@@ -51,7 +56,7 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
 
         # placing the canvas on the Tkinter window
         self._canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
-        self._graphFrame.place(x=260, y=65)
+        self._graphFrame.place(x=225, y=65)
 
     def unplace(self):
         self._isCurrWindow = False
@@ -69,11 +74,13 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         
         self._line1.set_ydata(self._data1)
         self._line1.set_xdata(self._timestamps)
+        self._plot1.set_xticks(self._timestamps)
         self._plot1.relim()
         self._plot1.autoscale_view()
         if(self._isData2):
             self._line2.set_ydata(self._data2)
             self._line2.set_xdata(self._timestamps)
+            self._plot2.set_xticks(self._timestamps)
             self._plot2.relim()
             self._plot2.autoscale_view()
         if (self._isCurrWindow):
@@ -87,6 +94,7 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._timestamps = timestamps
         self._line1.set_ydata(self._data1)
         self._line1.set_xdata(self._timestamps)
+        self._plot1.set_xticks(self._timestamps)
         self._plot1.relim()
         self._plot1.autoscale_view()
 
@@ -94,6 +102,7 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
             self._data2 = data2
             self._line2.set_ydata(self._data2)
             self._line2.set_xdata(self._timestamps)
+            self._plot2.set_xticks(self._timestamps)
             self._plot2.relim()
             self._plot2.autoscale_view()
 
