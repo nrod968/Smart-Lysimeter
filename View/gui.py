@@ -9,7 +9,7 @@ from view.system_health import SmartLysimeterSystemHealth
 from view.window import SmartLysimeterWindow
 from utils.gui_tools import *
 from model.model import Fieldnames, SmartLysimeterMessage, SmartLysimeterModel
-from datetime import time, datetime
+from datetime import datetime
 
 from tkinter import *
 
@@ -59,8 +59,8 @@ class SmartLysimeterView(Observer):
         self._drainageWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.DRAINAGE])
 
         self._phTxt.set("pH: {0:.3g}".format(reading[Fieldnames.PH]))
-        self._ecTxt.set("EC: {0:.3g}".format(reading[Fieldnames.EC]))
-        self._drainageTxt.set("Drainage Rate: {0:.3g}".format(reading[Fieldnames.DRAINAGE]))
+        self._ecTxt.set("EC: {0:.3g} uS/cm".format(reading[Fieldnames.EC]))
+        self._drainageTxt.set("Drainage Rate: {0:.3g}%".format(reading[Fieldnames.DRAINAGE]))
 
     def set_history_length(self):
         self._historyLength = self._controller.get_history_length()
