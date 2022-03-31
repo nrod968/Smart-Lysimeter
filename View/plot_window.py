@@ -1,6 +1,5 @@
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-import imp
 from tkinter import *
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
@@ -11,6 +10,7 @@ from view.data_window import SmartLysimeterDataWindow
 from utils.gui_tools import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+from model.model import Fieldnames
 
 class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
     def __init__(self, historyLength, timestamps, dataName1: str, data1, dataName2=None, data2=None):
@@ -39,10 +39,29 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._plot1.tick_params(axis='x', labelrotation=45)
         xfmt = DateFormatter('%H:%M:%S')
         self._plot1.xaxis.set_major_formatter(xfmt)
+        if (self._dataName1 == Fieldnames.PH):
+            self._plot1.axhline(y=5.6, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=6.1, color='red', linestyle=(5, (5, 5)))
+        elif (self._dataName1 == Fieldnames.EC):
+            self._plot1.axhline(y=1.8, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=2.4, color='red', linestyle=(5, (5, 5)))
+        elif (self._dataName1 == Fieldnames.DRAINAGE):
+            self._plot1.axhline(y=30, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=40, color='red', linestyle=(5, (5, 5)))
+
         if (self._isData2):
             self._plot2 = self._plot1.twinx()
             self._line2, = self._plot2.plot(self._timestamps, self._data2, color="green", marker='o')
             self._plot2.set_ylabel(self._dataName2, color="green")
+            if (self._dataName2 == Fieldnames.PH):
+                self._plot2.axhline(y=5.6, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=6.1, color='orange', linestyle=(0, (5, 5)))
+            elif (self._dataName2 == Fieldnames.EC):
+                self._plot2.axhline(y=1.8, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=2.4, color='orange', linestyle=(0, (5, 5)))
+            elif (self._dataName2 == Fieldnames.DRAINAGE):
+                self._plot2.axhline(y=30, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=40, color='orange', linestyle=(0, (5, 5)))
 
         self._plot1.set_autoscaley_on(True)
 
