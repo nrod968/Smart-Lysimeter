@@ -28,38 +28,49 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._toolbarFrame = Frame()
         self._historyLength = historyLength
         self._fig = Figure(figsize=(5.75, 3.75), dpi=100, tight_layout = True)
-        self._fig.suptitle("Hello World!")
+        if (self._isData2):
+            self._fig.suptitle(self._dataName1 + " and " + self._dataName2 + " vs Time")
+        else:
+            self._fig.suptitle(self._dataName1 + " vs Time")
         self._isCurrWindow = False
 
         # adding the subplot
         self._plot1 = self._fig.add_subplot(111)
-        self._line1, = self._plot1.plot(self._timestamps, self._data1, color="blue", marker='o')
-        self._plot1.set_ylabel(self._dataName1, color="blue")
-        self._plot1.set_xlabel("i", color="black")
+        self._plot1.set_xlabel("Timestamps", color="black")
         self._plot1.tick_params(axis='x', labelrotation=45)
         xfmt = DateFormatter('%H:%M:%S')
         self._plot1.xaxis.set_major_formatter(xfmt)
         if (self._dataName1 == Fieldnames.PH):
+            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="blue", marker='o')
+            self._plot1.set_ylabel(self._dataName1, color="blue")
             self._plot1.axhline(y=5.6, color='red', linestyle=(5, (5, 5)))
             self._plot1.axhline(y=6.1, color='red', linestyle=(5, (5, 5)))
         elif (self._dataName1 == Fieldnames.EC):
+            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="green", marker='o')
+            self._plot1.set_ylabel(self._dataName1 + " (uS/cm)", color="green")
             self._plot1.axhline(y=1.8, color='red', linestyle=(5, (5, 5)))
             self._plot1.axhline(y=2.4, color='red', linestyle=(5, (5, 5)))
         elif (self._dataName1 == Fieldnames.DRAINAGE):
+            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="purple", marker='o')
+            self._plot1.set_ylabel(self._dataName1 + " (%)", color="purple")
             self._plot1.axhline(y=30, color='red', linestyle=(5, (5, 5)))
             self._plot1.axhline(y=40, color='red', linestyle=(5, (5, 5)))
 
         if (self._isData2):
             self._plot2 = self._plot1.twinx()
-            self._line2, = self._plot2.plot(self._timestamps, self._data2, color="green", marker='o')
-            self._plot2.set_ylabel(self._dataName2, color="green")
             if (self._dataName2 == Fieldnames.PH):
+                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="blue", marker='o')
+                self._plot2.set_ylabel(self._dataName2, color="blue")
                 self._plot2.axhline(y=5.6, color='orange', linestyle=(0, (5, 5)))
                 self._plot2.axhline(y=6.1, color='orange', linestyle=(0, (5, 5)))
             elif (self._dataName2 == Fieldnames.EC):
+                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="green", marker='o')
+                self._plot2.set_ylabel(self._dataName2 + " (uS/cm)", color="green")
                 self._plot2.axhline(y=1.8, color='orange', linestyle=(0, (5, 5)))
                 self._plot2.axhline(y=2.4, color='orange', linestyle=(0, (5, 5)))
             elif (self._dataName2 == Fieldnames.DRAINAGE):
+                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="purple", marker='o')
+                self._plot2.set_ylabel(self._dataName2 + " (%)", color="purple")
                 self._plot2.axhline(y=30, color='orange', linestyle=(0, (5, 5)))
                 self._plot2.axhline(y=40, color='orange', linestyle=(0, (5, 5)))
 

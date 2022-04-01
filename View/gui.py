@@ -1,5 +1,6 @@
 from os import system
 from pathlib import Path
+
 from controller.controller import SmartLysimeterController
 from utils.observer import Observer
 from view.plot_window import SmartLysimeterPlotWindow
@@ -8,6 +9,7 @@ from view.system_health import SmartLysimeterSystemHealth
 from view.window import SmartLysimeterWindow
 from utils.gui_tools import *
 from model.model import Fieldnames, SmartLysimeterMessage, SmartLysimeterModel
+from datetime import datetime
 
 from tkinter import *
 
@@ -57,11 +59,11 @@ class SmartLysimeterView(Observer):
         self._drainageWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.DRAINAGE])
 
         self._phTxt.set("pH: {0:.3g}".format(reading[Fieldnames.PH]))
-        self._ecTxt.set("EC: {0:.3g}".format(reading[Fieldnames.EC]))
-        self._drainageTxt.set("Drainage Rate: {0:.3g}".format(reading[Fieldnames.DRAINAGE]))
+        self._ecTxt.set("EC: {0:.3g} uS/cm".format(reading[Fieldnames.EC]))
+        self._drainageTxt.set("Drainage Rate: {0:.3g}%".format(reading[Fieldnames.DRAINAGE]))
 
     def set_history_length(self):
-        self._historyLength = self._controller.get_history_length
+        self._historyLength = self._controller.get_history_length()
         timestamps = self._controller.get_timestamp_history()
         ph = self._controller.get_pH_history()
         ec = self._controller.get_EC_history()
@@ -139,11 +141,11 @@ class SmartLysimeterView(Observer):
 
         create_filleted_rectangle(self._canvas, 209, 440, 591, 470, cornerRadius=10, fill="#D5E8D4", outline="#82B366", tag="base")
         self._dateTxt.set("Date: 01/01/1970")
-        dateLbl = Label(self._root, textvariable=self._dateTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
-        dateLbl.place(x=219, y=441)
+        self._dateLbl = Label(self._root, textvariable=self._dateTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
+        self._dateLbl.place(x=219, y=441)
         self._timeTxt.set("Time: 00:00 AM")
-        timeLbl = Label(self._root, textvariable=self._timeTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
-        timeLbl.place(x=436, y=441)
+        self._timeLbl = Label(self._root, textvariable=self._timeTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
+        self._timeLbl.place(x=436, y=441)
 
         create_filleted_rectangle(self._canvas, 12, 65, 224, 181, cornerRadius=15, fill="#FFE6CC", outline="#D79B00", tag="base")
         self._canvas.create_text(118, 68, anchor="n", text="Most Recent Data", fill="#000000", font=("RobotoRoman Bold", 20 * -1), tag="base")
@@ -157,9 +159,21 @@ class SmartLysimeterView(Observer):
         self._drainageTxt.set("Drainage Rate: ")
         drainageLbl = Label(self._root, textvariable=self._drainageTxt, bg="#FFE6CC", font=("RobotoRoman Regular", 18 * -1))
         drainageLbl.place(x=26, y=152)
-        
+        self.tick()
         self._root.resizable(False, False)
         self._root.mainloop()
+    
+    def tick(self):
+        # get the current local time from the PC
+        t = datetime.now()
+        timestamp = "Time: " + t.strftime('%I:%M %p')
+        date = "Date: " + t.strftime("%m/%d/%Y")
+        self._timeTxt.set(timestamp)
+        self._dateTxt.set(date)
+        # calls itself every 200 milliseconds
+        # to update the time display as needed
+        # could use >200 ms, but display gets jerky
+        self._timeLbl.after(500, self.tick)
 
     def relative_to_assets(self, path: str) -> Path:
         return ASSETS_PATH / Path(path)
