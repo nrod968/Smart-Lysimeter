@@ -166,7 +166,7 @@ class SmartLysimeterView(Observer):
     def tick(self):
         # get the current local time from the PC
         t = datetime.now()
-        timestamp = "Time:" + t.strftime('%H:%M')
+        timestamp = "Time: " + t.strftime('%I:%M %p')
         date = "Date: " + t.strftime("%m/%d/%Y")
         self._timeTxt.set(timestamp)
         self._dateTxt.set(date)
