@@ -12,6 +12,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 from model.model import Fieldnames
 from model.constants import *
+import numpy as np
 
 class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
     def __init__(self, historyLength, timestamps, dataName1: str, data1, dataName2=None, data2=None):
@@ -41,39 +42,79 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._plot1.tick_params(axis='x', labelrotation=45)
         xfmt = DateFormatter('%H:%M:%S')
         self._plot1.xaxis.set_major_formatter(xfmt)
-        if (self._dataName1 == Fieldnames.PH):
-            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="blue", marker='o')
-            self._plot1.set_ylabel(self._dataName1, color="blue")
+        if (self._dataName1 == Fieldnames.PH_DR):
+            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="darkblue", marker='o')
+            self._plot1.set_ylabel(self._dataName1, color="darkblue")
+            #self._plot1.set_yticks(np.arange(PH_MIN_TICK, PH_MAX_TICK, PH_TICK_LEN))
+            #self._plot1.set_ylim(PH_MIN_TICK, PH_MAX_TICK)
             self._plot1.axhline(y=PH_MIN, color='red', linestyle=(5, (5, 5)))
             self._plot1.axhline(y=PH_MAX, color='red', linestyle=(5, (5, 5)))
-        elif (self._dataName1 == Fieldnames.EC):
-            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="green", marker='o')
-            self._plot1.set_ylabel(self._dataName1 + " (uS/cm)", color="green")
+        elif (self._dataName1 == Fieldnames.EC_DR):
+            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="darkgreen", marker='o')
+            self._plot1.set_ylabel(self._dataName1 + " (uS/cm)", color="darkgreen")
+            #self._plot1.set_yticks(np.arange(EC_MIN_TICK, EC_MAX_TICK, EC_TICK_LEN))
+            #self._plot1.set_ylim(EC_MIN_TICK, EC_MAX_TICK)
+            self._plot1.axhline(y=EC_MIN, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=EC_MAX, color='red', linestyle=(5, (5, 5)))
+        elif (self._dataName1 == Fieldnames.PH_IN):
+            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="lime", marker='o')
+            self._plot1.set_ylabel(self._dataName1, color="lime")
+            #self._plot1.set_yticks(np.arange(PH_MIN_TICK, PH_MAX_TICK, PH_TICK_LEN))
+            #self._plot1.set_ylim(PH_MIN_TICK, PH_MAX_TICK)
+            self._plot1.axhline(y=PH_MIN, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=PH_MAX, color='red', linestyle=(5, (5, 5)))
+        elif (self._dataName1 == Fieldnames.EC_IN):
+            self._line1, = self._plot1.plot(self._timestamps, self._data1, color="cyan", marker='o')
+            self._plot1.set_ylabel(self._dataName1 + " (uS/cm)", color="cyan")
+            #self._plot1.set_yticks(np.arange(EC_MIN_TICK, EC_MAX_TICK, EC_TICK_LEN))
+            #self._plot1.set_ylim(EC_MIN_TICK, EC_MAX_TICK)
             self._plot1.axhline(y=EC_MIN, color='red', linestyle=(5, (5, 5)))
             self._plot1.axhline(y=EC_MAX, color='red', linestyle=(5, (5, 5)))
         elif (self._dataName1 == Fieldnames.DRAINAGE):
             self._line1, = self._plot1.plot(self._timestamps, self._data1, color="purple", marker='o')
             self._plot1.set_ylabel(self._dataName1 + " (%)", color="purple")
+            #self._plot1.set_yticks(np.arange(DR_MIN_TICK, DR_MAX_TICK, DR_TICK_LEN))
+            #self._plot1.set_ylim(DR_MIN_TICK, DR_MAX_TICK)
             self._plot1.axhline(y=DR_MIN, color='red', linestyle=(5, (5, 5)))
             self._plot1.axhline(y=DR_MAX, color='red', linestyle=(5, (5, 5)))
 
         if (self._isData2):
             self._plot2 = self._plot1.twinx()
-            if (self._dataName2 == Fieldnames.PH):
-                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="blue", marker='o')
-                self._plot2.set_ylabel(self._dataName2, color="blue")
-                self._plot2.axhline(y=PH_MIN, color='orange', linestyle=(0, (5, 5)))
-                self._plot2.axhline(y=PH_MAX, color='orange', linestyle=(0, (5, 5)))
-            elif (self._dataName2 == Fieldnames.EC):
-                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="green", marker='o')
-                self._plot2.set_ylabel(self._dataName2 + " (uS/cm)", color="green")
-                self._plot2.axhline(y=EC_MIN, color='orange', linestyle=(0, (5, 5)))
-                self._plot2.axhline(y=EC_MAX, color='orange', linestyle=(0, (5, 5)))
+            if (self._dataName2 == Fieldnames.PH_DR):
+                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="darkblue", marker='o')
+                self._plot2.set_ylabel(self._dataName2, color="darkblue")
+                #self._plot2.set_yticks(np.arange(PH_MIN_TICK, PH_MAX_TICK, PH_TICK_LEN))
+                #self._plot2.set_ylim(PH_MIN_TICK, PH_MAX_TICK)
+                self._plot2.axhline(y=PH_MIN, color='darkorange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=PH_MAX, color='darkorange', linestyle=(0, (5, 5)))
+            elif (self._dataName2 == Fieldnames.EC_DR):
+                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="darkgreen", marker='o')
+                self._plot2.set_ylabel(self._dataName2 + " (uS/cm)", color="darkgreen")
+                #self._plot2.set_yticks(np.arange(EC_MIN_TICK, EC_MAX_TICK, EC_TICK_LEN))
+                #self._plot2.set_ylim(EC_MIN_TICK, EC_MAX_TICK)
+                self._plot2.axhline(y=EC_MIN, color='darkorange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=EC_MAX, color='darkorange', linestyle=(0, (5, 5)))
+            elif (self._dataName2 == Fieldnames.PH_IN):
+                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="lime", marker='o')
+                self._plot2.set_ylabel(self._dataName2, color="lime")
+                #self._plot2.set_yticks(np.arange(PH_MIN_TICK, PH_MAX_TICK, PH_TICK_LEN))
+                #self._plot2.set_ylim(PH_MIN_TICK, PH_MAX_TICK)
+                self._plot2.axhline(y=PH_MIN, color='darkorange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=PH_MAX, color='darkorange', linestyle=(0, (5, 5)))
+            elif (self._dataName2 == Fieldnames.EC_IN):
+                self._line2, = self._plot2.plot(self._timestamps, self._data2, color="cyan", marker='o')
+                self._plot2.set_ylabel(self._dataName2 + " (uS/cm)", color="cyan")
+                #self._plot2.set_yticks(np.arange(EC_MIN_TICK, EC_MAX_TICK, EC_TICK_LEN))
+                #self._plot2.set_ylim(EC_MIN_TICK, EC_MAX_TICK)
+                self._plot2.axhline(y=EC_MIN, color='darkorange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=EC_MAX, color='darkorange', linestyle=(0, (5, 5)))
             elif (self._dataName2 == Fieldnames.DRAINAGE):
                 self._line2, = self._plot2.plot(self._timestamps, self._data2, color="purple", marker='o')
                 self._plot2.set_ylabel(self._dataName2 + " (%)", color="purple")
-                self._plot2.axhline(y=DR_MIN, color='orange', linestyle=(0, (5, 5)))
-                self._plot2.axhline(y=DR_MAX, color='orange', linestyle=(0, (5, 5)))
+                #self._plot2.set_yticks(np.arange(DR_MIN_TICK, DR_MAX_TICK, DR_TICK_LEN))
+                #self._plot2.set_ylim(DR_MIN_TICK, DR_MAX_TICK)
+                self._plot2.axhline(y=DR_MIN, color='darkorange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=DR_MAX, color='darkorange', linestyle=(0, (5, 5)))
 
         self._plot1.set_autoscaley_on(True)
 

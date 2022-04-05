@@ -10,12 +10,12 @@ class SmartLysimeterSystemHealth(SmartLysimeterWindow):
         self._phDrainageTxt = StringVar()
         self._phTxt = StringVar()
         self._ecTxt = StringVar()
-        self._pumpTxt = StringVar()
+        self._tankTxt = StringVar()
         self._ecDrainageTxt = StringVar()
         self._drainageTxt = StringVar()
         self._phLbl = Label(root, textvariable=self._phTxt, bg="#FFF2CC", font=("RobotoRoman Regular", 18 * -1))
         self._ecLbl = Label(root, textvariable=self._ecTxt, bg="#FFF2CC", font=("RobotoRoman Regular", 18 * -1))
-        self._pumpLbl = Label(root, textvariable=self._pumpTxt, bg="#FFF2CC", font=("RobotoRoman Regular", 18 * -1))
+        self._tankLbl = Label(root, textvariable=self._tankTxt, bg="#FFF2CC", font=("RobotoRoman Regular", 18 * -1))
         self._phDrainageLbl = Label(root, textvariable=self._phDrainageTxt, bg="#FFF2CC", font=("RobotoRoman Regular", 18 * -1))
         self._ecDrainageLbl = Label(root, textvariable=self._ecDrainageTxt, bg="#FFF2CC", font=("RobotoRoman Regular", 18 * -1))
         self._drainageLbl = Label(root, textvariable=self._drainageTxt, bg="#FFF2CC", font=("RobotoRoman Regular", 18 * -1))
@@ -27,13 +27,13 @@ class SmartLysimeterSystemHealth(SmartLysimeterWindow):
         self._phLbl.place(x=580, y=130)
         self._ecTxt.set("Input EC Status:\nGood")
         self._ecLbl.place(x=580, y=240)
-        self._pumpTxt.set("Input Pump Status:\nGood")
-        self._pumpLbl.place(x=569, y=350)
+        self._tankTxt.set("Tank Status:\nGood")
+        self._tankLbl.place(x=595, y=350)
         self._phDrainageTxt.set("Drainage pH Status:\nGood")
         self._phDrainageLbl.place(x=280, y=130)
         self._ecDrainageTxt.set("Drainage EC Status:\nGood")
         self._ecDrainageLbl.place(x=280, y=240)
-        self._drainageTxt.set("Drainage Pump Status:\nGood")
+        self._drainageTxt.set("Drainage Rate Status:\nGood")
         self._drainageLbl.place(x=271, y=350)
         
         create_filleted_rectangle(canvas, 235, 110, 495, 200, cornerRadius=10, fill="#FFF2CC", outline="#D6B656", tag=("health"))
@@ -50,32 +50,56 @@ class SmartLysimeterSystemHealth(SmartLysimeterWindow):
         elif (status == Status.DR_MIN_REACHED):
             self._drainageTxt.set("Drainage Pump Status:\nToo Low")
             self._drainageLbl.config(fg='red')
-        elif (status == Status.DR_IN_LIMITS):
+        elif (status == Status.DR_WITHIN_LIMITS):
             self._drainageTxt.set("Drainage Pump Status:\nGood")
             self._drainageLbl.config(fg='green')
-        elif (status == Status.EC_MAX_REACHED):
+        elif (status == Status.TANK_TOO_FULL):
+            self._tankTxt.set("Tank Status:\nToo Full")
+            self._tankLbl.config(fg='red')
+        elif (status == Status.TANK_WITHIN_LIMITS):
+            self._tankTxt.set("Tank Status:\nGood")
+            self._tankLbl.config(fg='green')
+        elif (status == Status.EC_DR_MAX_REACHED):
             self._ecDrainageTxt.set("Drainage EC Status:\nToo High")
             self._ecDrainageLbl.config(fg='red')
-        elif (status == Status.EC_MIN_REACHED):
+        elif (status == Status.EC_DR_MIN_REACHED):
             self._ecDrainageTxt.set("Drainage EC Status:\nToo Low")
             self._ecDrainageLbl.config(fg='red')
-        elif (status == Status.EC_IN_LIMITS):
+        elif (status == Status.EC_DR_WITHIN_LIMITS):
             self._ecDrainageTxt.set("Drainage EC Status:\nGood")
             self._ecDrainageLbl.config(fg='green')
-        elif (status == Status.PH_MAX_REACHED):
+        elif (status == Status.PH_DR_MAX_REACHED):
             self._phDrainageTxt.set("Drainage pH Status:\nToo High")
             self._phDrainageLbl.config(fg='red')
-        elif (status == Status.PH_MIN_REACHED):
+        elif (status == Status.PH_DR_MIN_REACHED):
             self._phDrainageTxt.set("Drainage pH Status:\nToo Low")
             self._phDrainageLbl.config(fg='red')
-        elif (status == Status.PH_IN_LIMITS):
+        elif (status == Status.PH_DR_WITHIN_LIMITS):
             self._phDrainageTxt.set("Drainage pH Status:\nGood")
             self._phDrainageLbl.config(fg='green')
+        elif (status == Status.EC_IN_MAX_REACHED):
+            self._ecTxt.set("Input EC Status:\nToo High")
+            self._ecLbl.config(fg='red')
+        elif (status == Status.EC_IN_MIN_REACHED):
+            self._ecTxt.set("Input EC Status:\nToo Low")
+            self._ecLbl.config(fg='red')
+        elif (status == Status.EC_IN_WITHIN_LIMITS):
+            self._ecTxt.set("Input EC Status:\nGood")
+            self._ecLbl.config(fg='green')
+        elif (status == Status.PH_IN_MAX_REACHED):
+            self._phTxt.set("Input pH Status:\nToo High")
+            self._phLbl.config(fg='red')
+        elif (status == Status.PH_IN_MIN_REACHED):
+            self._phTxt.set("Input pH Status:\nToo Low")
+            self._phLbl.config(fg='red')
+        elif (status == Status.PH_IN_WITHIN_LIMITS):
+            self._phTxt.set("Input pH Status:\nGood")
+            self._phLbl.config(fg='green')
 
     def unplace(self):
         self._phDrainageLbl.place_forget()
         self._phLbl.place_forget()
         self._ecLbl.place_forget()
-        self._pumpLbl.place_forget()
+        self._tankLbl.place_forget()
         self._ecDrainageLbl.place_forget()
         self._drainageLbl.place_forget()
