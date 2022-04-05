@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 import csv
 
 from utils.observer import Observable
@@ -19,6 +19,7 @@ class SmartLysimeterMessage(Enum):
 
 class SmartLysimeterModel(Observable):
     fieldnames = [str(el) for el in Fieldnames]
+
     def __init__(self, dbFileName, csvFileName, historyLength=10):
         super().__init__()
         self._lastDataPoint = {}

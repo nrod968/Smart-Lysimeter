@@ -2,6 +2,7 @@ from os import system
 from pathlib import Path
 
 from controller.controller import SmartLysimeterController
+from model.constants import *
 from utils.observer import Observer
 from view.plot_window import SmartLysimeterPlotWindow
 from view.settings import SmartLysimeterSettings
@@ -30,7 +31,7 @@ class SmartLysimeterView(Observer):
         self._historyLength = self._controller.get_history_length()
 
         self._home = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH, self._controller.get_pH_history(), Fieldnames.EC, self._controller.get_EC_history())
-        self._systemHealth = SmartLysimeterSystemHealth()
+        self._systemHealth = SmartLysimeterSystemHealth(self._root)
         self._settings = SmartLysimeterSettings()
         self._phWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH, self._controller.get_pH_history())
         self._ecWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.EC, self._controller.get_EC_history())
@@ -61,6 +62,16 @@ class SmartLysimeterView(Observer):
         self._phTxt.set("pH: {0:.3g}".format(reading[Fieldnames.PH]))
         self._ecTxt.set("EC: {0:.3g} uS/cm".format(reading[Fieldnames.EC]))
         self._drainageTxt.set("Drainage Rate: {0:.3g}%".format(reading[Fieldnames.DRAINAGE]))
+
+        if (reading[Fieldnames.PH] > PH_MAX): self._systemHealth.change_status(Status.PH_MAX_REACHED)
+        elif (reading[Fieldnames.PH] < PH_MIN): self._systemHealth.change_status(Status.PH_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.PH_IN_LIMITS)
+        if (reading[Fieldnames.EC] > EC_MAX): self._systemHealth.change_status(Status.EC_MAX_REACHED)
+        elif (reading[Fieldnames.EC] < EC_MIN): self._systemHealth.change_status(Status.EC_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.EC_IN_LIMITS)
+        if (reading[Fieldnames.DRAINAGE] > DR_MAX): self._systemHealth.change_status(Status.DR_MAX_REACHED)
+        elif (reading[Fieldnames.DRAINAGE] < DR_MIN): self._systemHealth.change_status(Status.DR_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.DR_IN_LIMITS)
 
     def set_history_length(self):
         self._historyLength = self._controller.get_history_length()
