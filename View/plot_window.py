@@ -11,6 +11,7 @@ from utils.gui_tools import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 from model.model import Fieldnames
+from model.constants import *
 
 class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
     def __init__(self, historyLength, timestamps, dataName1: str, data1, dataName2=None, data2=None):
@@ -43,36 +44,36 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         if (self._dataName1 == Fieldnames.PH):
             self._line1, = self._plot1.plot(self._timestamps, self._data1, color="blue", marker='o')
             self._plot1.set_ylabel(self._dataName1, color="blue")
-            self._plot1.axhline(y=5.6, color='red', linestyle=(5, (5, 5)))
-            self._plot1.axhline(y=6.1, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=PH_MIN, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=PH_MAX, color='red', linestyle=(5, (5, 5)))
         elif (self._dataName1 == Fieldnames.EC):
             self._line1, = self._plot1.plot(self._timestamps, self._data1, color="green", marker='o')
             self._plot1.set_ylabel(self._dataName1 + " (uS/cm)", color="green")
-            self._plot1.axhline(y=1.8, color='red', linestyle=(5, (5, 5)))
-            self._plot1.axhline(y=2.4, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=EC_MIN, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=EC_MAX, color='red', linestyle=(5, (5, 5)))
         elif (self._dataName1 == Fieldnames.DRAINAGE):
             self._line1, = self._plot1.plot(self._timestamps, self._data1, color="purple", marker='o')
             self._plot1.set_ylabel(self._dataName1 + " (%)", color="purple")
-            self._plot1.axhline(y=30, color='red', linestyle=(5, (5, 5)))
-            self._plot1.axhline(y=40, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=DR_MIN, color='red', linestyle=(5, (5, 5)))
+            self._plot1.axhline(y=DR_MAX, color='red', linestyle=(5, (5, 5)))
 
         if (self._isData2):
             self._plot2 = self._plot1.twinx()
             if (self._dataName2 == Fieldnames.PH):
                 self._line2, = self._plot2.plot(self._timestamps, self._data2, color="blue", marker='o')
                 self._plot2.set_ylabel(self._dataName2, color="blue")
-                self._plot2.axhline(y=5.6, color='orange', linestyle=(0, (5, 5)))
-                self._plot2.axhline(y=6.1, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=PH_MIN, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=PH_MAX, color='orange', linestyle=(0, (5, 5)))
             elif (self._dataName2 == Fieldnames.EC):
                 self._line2, = self._plot2.plot(self._timestamps, self._data2, color="green", marker='o')
                 self._plot2.set_ylabel(self._dataName2 + " (uS/cm)", color="green")
-                self._plot2.axhline(y=1.8, color='orange', linestyle=(0, (5, 5)))
-                self._plot2.axhline(y=2.4, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=EC_MIN, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=EC_MAX, color='orange', linestyle=(0, (5, 5)))
             elif (self._dataName2 == Fieldnames.DRAINAGE):
                 self._line2, = self._plot2.plot(self._timestamps, self._data2, color="purple", marker='o')
                 self._plot2.set_ylabel(self._dataName2 + " (%)", color="purple")
-                self._plot2.axhline(y=30, color='orange', linestyle=(0, (5, 5)))
-                self._plot2.axhline(y=40, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=DR_MIN, color='orange', linestyle=(0, (5, 5)))
+                self._plot2.axhline(y=DR_MAX, color='orange', linestyle=(0, (5, 5)))
 
         self._plot1.set_autoscaley_on(True)
 
@@ -95,7 +96,8 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
     def add_data_point(self, timestamp, data1, data2=None):
         self._timestamps.append(timestamp)
         self._data1.append(data1)
-        if(self._isData2): self._data2.append(data2)
+        if(self._isData2):
+            self._data2.append(data2)
 
         if (len(self._timestamps) > self._historyLength):
             self._timestamps.pop(0)
