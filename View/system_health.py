@@ -45,13 +45,13 @@ class SmartLysimeterSystemHealth(SmartLysimeterWindow):
     
     def change_status(self, status: Status):
         if (status == Status.DR_MAX_REACHED):
-            self._drainageTxt.set("Drainage Pump Status:\nToo High")
+            self._drainageTxt.set("Drainage Rate Status:\nToo High")
             self._drainageLbl.config(fg='red')
         elif (status == Status.DR_MIN_REACHED):
-            self._drainageTxt.set("Drainage Pump Status:\nToo Low")
+            self._drainageTxt.set("Drainage Rate Status:\nToo Low")
             self._drainageLbl.config(fg='red')
         elif (status == Status.DR_WITHIN_LIMITS):
-            self._drainageTxt.set("Drainage Pump Status:\nGood")
+            self._drainageTxt.set("Drainage Rate Status:\nGood")
             self._drainageLbl.config(fg='green')
         elif (status == Status.TANK_TOO_FULL):
             self._tankTxt.set("Tank Status:\nToo Full")
