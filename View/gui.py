@@ -1,19 +1,25 @@
 from os import system
 from pathlib import Path
-from view.home import SmartLysimeterHome
+
+from controller.controller import SmartLysimeterController
+from model.constants import *
+from utils.observer import Observer
+from view.plot_window import SmartLysimeterPlotWindow
 from view.settings import SmartLysimeterSettings
 from view.system_health import SmartLysimeterSystemHealth
 from view.window import SmartLysimeterWindow
 from utils.gui_tools import *
+from model.model import Fieldnames, SmartLysimeterMessage, SmartLysimeterModel
+from datetime import datetime
 
 from tkinter import *
-
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
-class SmartLysimeterView():
-    def __init__(self):
+class SmartLysimeterView(Observer):
+    def __init__(self, controller: SmartLysimeterController, model: SmartLysimeterModel):
+        model.register(self)
         self._root = Tk()
         self._canvas = Canvas(self._root, bg = "#FFFFFF", height = 480, width = 800, bd = 0, highlightthickness = 0, relief = "ridge")
         self._dateTxt = StringVar()
@@ -21,20 +27,70 @@ class SmartLysimeterView():
         self._phTxt = StringVar()
         self._ecTxt = StringVar()
         self._drainageTxt = StringVar()
+        self._controller = controller
+        self._historyLength = self._controller.get_history_length()
 
-        self._home = SmartLysimeterHome()
-        self._systemHealth = SmartLysimeterSystemHealth()
+        self._home = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH_DR, self._controller.get_pH_dr_history(), Fieldnames.EC_DR, self._controller.get_EC_dr_history())
+        self._systemHealth = SmartLysimeterSystemHealth(self._root)
         self._settings = SmartLysimeterSettings()
+        self._phWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH_DR, self._controller.get_pH_dr_history(), Fieldnames.PH_IN, self._controller.get_pH_in_history())
+        self._ecWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.EC_DR, self._controller.get_EC_dr_history(), Fieldnames.EC_IN, self._controller.get_EC_in_history())
+        self._drainageWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.DRAINAGE, self._controller.get_drainage_history())
         self.init_gui()
-    
-    def relative_to_assets(self, path: str) -> Path:
-        return ASSETS_PATH / Path(path)
 
     def switch_to(self, window: SmartLysimeterWindow):
-        self._canvas.delete("health||settings||home")
-        window.place(self._canvas, self._root)
+        if (window == self._currWindow):
+            pass
+        self._canvas.delete("health||settings||home||pH||EC||drainage")
         self._currWindow.unplace()
+        window.place(self._canvas, self._root)
         self._currWindow = window
+
+    def update(self, message):
+        if (message is SmartLysimeterMessage.HISTORY_LEN_CHANGED):
+            self.set_history_length()
+        elif (message is SmartLysimeterMessage.NEW_READING):
+            self.add_data_point()
+
+    def add_data_point(self):
+        reading = self._controller.get_last_reading()
+        self._home.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.PH_DR], reading[Fieldnames.EC_DR])
+        self._phWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.PH_DR], reading[Fieldnames.PH_IN])
+        self._ecWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.EC_DR], reading[Fieldnames.EC_IN])
+        self._drainageWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.DRAINAGE])
+
+        self._phTxt.set("pH: {0:.3g}".format(reading[Fieldnames.PH_DR]))
+        self._ecTxt.set("EC: {0:.3g} uS/cm".format(reading[Fieldnames.EC_DR]))
+        self._drainageTxt.set("Drainage Rate: {0:.3g}%".format(reading[Fieldnames.DRAINAGE]))
+
+        if (reading[Fieldnames.PH_DR] > PH_MAX): self._systemHealth.change_status(Status.PH_DR_MAX_REACHED)
+        elif (reading[Fieldnames.PH_DR] < PH_MIN): self._systemHealth.change_status(Status.PH_DR_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.PH_DR_WITHIN_LIMITS)
+        if (reading[Fieldnames.EC_DR] > EC_MAX): self._systemHealth.change_status(Status.EC_DR_MAX_REACHED)
+        elif (reading[Fieldnames.EC_DR] < EC_MIN): self._systemHealth.change_status(Status.EC_DR_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.EC_DR_WITHIN_LIMITS)
+        if (reading[Fieldnames.PH_IN] > PH_MAX): self._systemHealth.change_status(Status.PH_IN_MAX_REACHED)
+        elif (reading[Fieldnames.PH_IN] < PH_MIN): self._systemHealth.change_status(Status.PH_IN_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.PH_IN_WITHIN_LIMITS)
+        if (reading[Fieldnames.EC_IN] > EC_MAX): self._systemHealth.change_status(Status.EC_IN_MAX_REACHED)
+        elif (reading[Fieldnames.EC_IN] < EC_MIN): self._systemHealth.change_status(Status.EC_IN_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.EC_IN_WITHIN_LIMITS)
+        if (reading[Fieldnames.DRAINAGE] > DR_MAX): self._systemHealth.change_status(Status.DR_MAX_REACHED)
+        elif (reading[Fieldnames.DRAINAGE] < DR_MIN): self._systemHealth.change_status(Status.DR_MIN_REACHED)
+        else: self._systemHealth.change_status(Status.DR_WITHIN_LIMITS)
+        self._systemHealth.change_status(Status.TANK_WITHIN_LIMITS)
+
+    def set_history_length(self):
+        self._historyLength = self._controller.get_history_length()
+        timestamps = self._controller.get_timestamp_history()
+        ph = self._controller.get_pH_dr_history()
+        ec = self._controller.get_EC_dr_history()
+        drainage = self._controller.get_drainage_history()
+        
+        self._home.set_history_length(self._historyLength, timestamps, ph, ec)
+        self._phWindow.set_history_length(self._historyLength, timestamps, ph)
+        self._ecWindow.set_history_length(self._historyLength, timestamps, ec)
+        self._drainageWindow.set_history_length(self._historyLength, timestamps, drainage)
 
     def init_gui(self):
         self._canvas.place(x = 0, y = 0)
@@ -59,7 +115,7 @@ class SmartLysimeterView():
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.switch_to(self._phWindow),
             relief="flat")
         button_2.place(x=12, y=230, width=212, height=30)
 
@@ -68,7 +124,7 @@ class SmartLysimeterView():
             image=button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=lambda: self.switch_to(self._ecWindow),
             relief="flat")
         button_3.place(x=12, y=270, width=212, height=30)
 
@@ -77,7 +133,7 @@ class SmartLysimeterView():
             image=button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            command=lambda: self.switch_to(self._drainageWindow),
             relief="flat")
         button_4.place(x=12, y=310, width=212, height=30)
 
@@ -103,11 +159,11 @@ class SmartLysimeterView():
 
         create_filleted_rectangle(self._canvas, 209, 440, 591, 470, cornerRadius=10, fill="#D5E8D4", outline="#82B366", tag="base")
         self._dateTxt.set("Date: 01/01/1970")
-        dateLbl = Label(self._root, textvariable=self._dateTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
-        dateLbl.place(x=219, y=441)
+        self._dateLbl = Label(self._root, textvariable=self._dateTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
+        self._dateLbl.place(x=219, y=441)
         self._timeTxt.set("Time: 00:00 AM")
-        timeLbl = Label(self._root, textvariable=self._timeTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
-        timeLbl.place(x=436, y=441)
+        self._timeLbl = Label(self._root, textvariable=self._timeTxt, bg="#D5E8D4", font=("RobotoRoman Bold", 20 * -1))
+        self._timeLbl.place(x=436, y=441)
 
         create_filleted_rectangle(self._canvas, 12, 65, 224, 181, cornerRadius=15, fill="#FFE6CC", outline="#D79B00", tag="base")
         self._canvas.create_text(118, 68, anchor="n", text="Most Recent Data", fill="#000000", font=("RobotoRoman Bold", 20 * -1), tag="base")
@@ -121,6 +177,21 @@ class SmartLysimeterView():
         self._drainageTxt.set("Drainage Rate: ")
         drainageLbl = Label(self._root, textvariable=self._drainageTxt, bg="#FFE6CC", font=("RobotoRoman Regular", 18 * -1))
         drainageLbl.place(x=26, y=152)
-        
+        self.tick()
         self._root.resizable(False, False)
         self._root.mainloop()
+    
+    def tick(self):
+        # get the current local time from the PC
+        t = datetime.now()
+        timestamp = "Time: " + t.strftime('%I:%M %p')
+        date = "Date: " + t.strftime("%m/%d/%Y")
+        self._timeTxt.set(timestamp)
+        self._dateTxt.set(date)
+        # calls itself every 200 milliseconds
+        # to update the time display as needed
+        # could use >200 ms, but display gets jerky
+        self._timeLbl.after(500, self.tick)
+
+    def relative_to_assets(self, path: str) -> Path:
+        return ASSETS_PATH / Path(path)

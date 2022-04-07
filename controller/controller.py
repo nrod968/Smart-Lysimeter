@@ -1,7 +1,15 @@
+from datetime import datetime
 from model.model import SmartLysimeterModel, Fieldnames
 class SmartLysimeterController():
     def __init__(self, model: SmartLysimeterModel):
         self._model = model
+
+    def record_data_point(self, timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading):
+        if (isinstance(timestamp, float)):
+            timestamp = datetime.fromtimestamp(timestamp)
+        if (isinstance(timestamp, datetime)):
+            timestamp = (timestamp.replace(microsecond=0)).isoformat()
+        self._model.record_data_point(timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading)
 
     def get_history_length(self) -> int:
         return self._model.get_history_length()
@@ -9,33 +17,56 @@ class SmartLysimeterController():
         self._model.set_history_length(historyLength)
 
     def get_last_reading(self):
-        return self._model.get_last_reading()
-    def get_last_pH_reading(self) -> float:
         reading = self._model.get_last_reading()
-        return reading[Fieldnames.PH]
-    def get_last_EC_reading(self) -> float:
+        reading[Fieldnames.TIMESTAMP] = datetime.fromisoformat(reading[Fieldnames.TIMESTAMP])
+        return reading
+    def get_last_pH_in_reading(self) -> float:
         reading = self._model.get_last_reading()
-        return reading[Fieldnames.EC]
+        return reading[Fieldnames.PH_IN]
+    def get_last_EC_in_reading(self) -> float:
+        reading = self._model.get_last_reading()
+        return reading[Fieldnames.EC_IN]
+    def get_last_pH_dr_reading(self) -> float:
+        reading = self._model.get_last_reading()
+        return reading[Fieldnames.PH_DR]
+    def get_last_EC_dr_reading(self) -> float:
+        reading = self._model.get_last_reading()
+        return reading[Fieldnames.EC_DR]
     def get_last_drainage_reading(self) -> float:
         reading = self._model.get_last_reading()
         return reading[Fieldnames.DRAINAGE]
     def get_timestamp_last_reading(self):
         reading = self._model.get_last_reading()
-        return reading[Fieldnames.TIMESTAMP]
+        return datetime.fromisoformat(reading[Fieldnames.TIMESTAMP])
     
     def get_history(self):
-        return self._model.get_history()
-    def get_pH_history(self) -> float:
+        readings = self._model.get_history()
+        for reading in readings:
+            reading[Fieldnames.TIMESTAMP] = datetime.fromisoformat(reading[Fieldnames.TIMESTAMP])
+        return readings
+    def get_pH_in_history(self) -> float:
         readings = self._model.get_history()
         phReadings = []
         for reading in readings:
-            phReadings.append(reading[Fieldnames.PH])
+            phReadings.append(reading[Fieldnames.PH_IN])
         return phReadings
-    def get_EC_history(self) -> float:
+    def get_EC_in_history(self) -> float:
         readings = self._model.get_history()
         ecReadings = []
         for reading in readings:
-            ecReadings.append(reading[Fieldnames.EC])
+            ecReadings.append(reading[Fieldnames.EC_IN])
+        return ecReadings
+    def get_pH_dr_history(self) -> float:
+        readings = self._model.get_history()
+        phReadings = []
+        for reading in readings:
+            phReadings.append(reading[Fieldnames.PH_DR])
+        return phReadings
+    def get_EC_dr_history(self) -> float:
+        readings = self._model.get_history()
+        ecReadings = []
+        for reading in readings:
+            ecReadings.append(reading[Fieldnames.EC_DR])
         return ecReadings
     def get_drainage_history(self) -> float:
         readings = self._model.get_history()
@@ -47,5 +78,5 @@ class SmartLysimeterController():
         readings = self._model.get_history()
         timestampReadings = []
         for reading in readings:
-            timestampReadings.append(reading[Fieldnames.TIMESTAMP])
+            timestampReadings.append(datetime.fromisoformat(reading[Fieldnames.TIMESTAMP]))
         return timestampReadings
