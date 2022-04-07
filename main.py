@@ -2,18 +2,21 @@ import threading
 from time import sleep
 from controller.controller import SmartLysimeterController
 from model.model import SmartLysimeterModel
-from utils.driver import SmartLysimeterDriver
+from utils.data_driver import SmartLysimeterDataDriver
+from utils.test_driver import SmartLysimeterTestDriver
 from view.gui import SmartLysimeterView
 
 DRIVERTEST = True
 
-def collect_data(model):
+def collect_data(controller):
     sleep(1)
     if (DRIVERTEST):
-        driver = SmartLysimeterDriver(model)
+        driver = SmartLysimeterTestDriver(controller)
+    else:
+        driver = SmartLysimeterDataDriver(controller)
     while(True):
         driver.generate_datapoint()
-        sleep(1)
+        sleep(5)
 
 def main():
     model = SmartLysimeterModel("db.json", "data.csv")
