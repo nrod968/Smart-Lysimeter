@@ -6,8 +6,10 @@ from utils.observer import Observable
 
 class Fieldnames(str, Enum):
     TIMESTAMP = "Timestamp"
-    PH = "pH"
-    EC = "EC"
+    PH_IN = "Input pH"
+    EC_IN = "Input EC"
+    PH_DR = "Drainage pH"
+    EC_DR = "Drainage EC"
     DRAINAGE = "Drainage Rate"
 
     def __str__(self) -> str:
@@ -36,10 +38,12 @@ class SmartLysimeterModel(Observable):
     def get_history_length(self):
         return self._historyLength
 
-    def record_data_point(self, timestamp, phReading, ecReading, drainageReading):
+    def record_data_point(self, timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading):
         self._lastDataPoint =  {str(Fieldnames.TIMESTAMP): timestamp,
-                                str(Fieldnames.PH): round(phReading, 2),
-                                str(Fieldnames.EC): round(ecReading, 2),
+                                str(Fieldnames.PH_IN): round(phInReading, 2),
+                                str(Fieldnames.EC_IN): round(ecInReading, 2),
+                                str(Fieldnames.PH_DR): round(phDrReading, 2),
+                                str(Fieldnames.EC_DR): round(ecDrReading, 2),
                                 str(Fieldnames.DRAINAGE): round(drainageReading, 2)}
         self.save_last_reading_csv()
         self.save_last_reading_db()

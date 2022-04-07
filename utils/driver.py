@@ -11,8 +11,10 @@ class SmartLysimeterDriver():
         self._randgen = Random()
     
     def generate_datapoint(self):
-        ph = self._randgen.gauss(mu=5.85, sigma=0.15)
-        ec = self._randgen.gauss(mu=2.1, sigma=0.15)
+        phIn = self._randgen.gauss(mu=5.85, sigma=0.15)
+        ecIn = self._randgen.gauss(mu=2.1, sigma=0.15)
+        phDr = self._randgen.gauss(mu=5.85, sigma=0.15)
+        ecDr = self._randgen.gauss(mu=2.1, sigma=0.15)
         drainage = self._randgen.gauss(mu=35.0, sigma=2.0)
         timestamp = datetime.now()
-        self._controller.record_data_point(timestamp, ph, ec, drainage)
+        self._controller.record_data_point(timestamp, phIn, ecIn, phDr, ecDr, drainage)
