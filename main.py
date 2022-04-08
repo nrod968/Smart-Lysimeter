@@ -2,8 +2,8 @@ import threading
 from time import sleep
 from controller.controller import SmartLysimeterController
 from model.model import SmartLysimeterModel
-from utils.data_driver import SmartLysimeterDataDriver
-from utils.test_driver import SmartLysimeterTestDriver
+from sensors.data_driver import SmartLysimeterDataDriver
+from sensors.test_driver import SmartLysimeterTestDriver
 from view.gui import SmartLysimeterView
 
 DRIVERTEST = True
