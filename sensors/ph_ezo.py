@@ -7,7 +7,6 @@ from utils.uart import UART
 class Command(str, Enum):
     READ = "R"
     STOP_CONTINUOUS = "C,0"
-    CAL_DRY = "Cal,dry"
     CAL_LOW = "Cal,low,{0}"
     CAL_MID = "Cal,mid,{0}"
     SLEEP = "Sleep"
