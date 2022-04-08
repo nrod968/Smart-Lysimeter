@@ -3,6 +3,8 @@ import string
 import time 
 from serial import SerialException, Serial
 
+from utils.data_protocol import EZODataProtocol, Protocol
+
 class Port(str, Enum):
 	UART0 = "/dev/ttyAMA0"
 	UART2 = "/dev/ttyAMA1"
@@ -12,23 +14,13 @@ class Port(str, Enum):
 	def __str__(self) -> str:
 		return str.__str__(self)
 
-class UART():
+class UART(EZODataProtocol):
 	def __init__(self, port):
 		self._port = str(port)
 		try:
 			self._ser = Serial(self._port, 9600, timeout=0)
 		except SerialException as e:
 			print( "Error, ", e)
-
-	def get_datapoint(self):
-		self.send_cmd("C,0")
-		time.sleep(1)
-		self._ser.flush()
-		self.send_cmd("R")
-		lines = self.read_lines()
-		for i in range(len(lines)):
-			if lines[-1 * (i + 1)][0] != b'*'[0]:
-				return lines[-1 * (i + 1)].decode('utf-8')
 
 	def read_line(self):
 		"""
@@ -79,3 +71,6 @@ class UART():
 		except SerialException as e:
 			print ("Error, ", e)
 			return None
+	
+	def flush(self):
+		self._ser.flush()
