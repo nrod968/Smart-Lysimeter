@@ -1,5 +1,4 @@
 import abc
-from tkinter import *
 
 class SmartLysimeterWindow(metaclass=abc.ABCMeta):
     

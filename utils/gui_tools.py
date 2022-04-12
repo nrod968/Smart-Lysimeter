@@ -7,6 +7,12 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+def open_popup(root, message, title):
+    top = Toplevel(root)
+    top.geometry("750x270")
+    top.title(title)
+    Label(top, text= message, font=('Mistral 18 bold')).place(x=150,y=80)
+
 def create_filleted_rectangle(canvas: Canvas, x0, y0, x1, y1, cornerRadius, fill='', outline='', text="", font=None, tag=""):
         points = [
             x0,(y0 + cornerRadius), (x0 + cornerRadius),(y0 + cornerRadius), (x0 + cornerRadius),y0,

@@ -1,8 +1,36 @@
 from datetime import datetime
 from model.model import SmartLysimeterModel, Fieldnames
+from sensors.dr_mock import MockDRSensor
+from sensors.ec_ezo import ECSensor
+from sensors.ec_mock import MockECSensor
+from sensors.ph_ezo import PHSensor
+from sensors.ph_mock import MockPHSensor
+from sensors.sensor import Calibration, Sensor
+from utils.data_protocol import Protocol
+from utils.uart import Port
 class SmartLysimeterController():
-    def __init__(self, model: SmartLysimeterModel):
+    def __init__(self, model: SmartLysimeterModel, isTest=False):
         self._model = model
+        if (isTest):
+            self._phIn = MockPHSensor()
+            self._phDr = MockPHSensor()
+            self._ecIn = MockECSensor()
+            self._ecDr = MockECSensor()
+        else:
+            self._phIn = PHSensor(Protocol.UART, Port.UART0)
+            self._phDr = PHSensor(Protocol.UART, Port.UART5)
+            self._ecIn = ECSensor(Protocol.UART, Port.UART2)
+            self._ecDr = ECSensor(Protocol.UART, Port.UART3)
+        self._dr = MockDRSensor()
+
+    def generate_datapoint(self):
+        phInVal = self._phIn.get_datapoint()
+        ecInVal = self._ecIn.get_datapoint()
+        phDrVal = self._phDr.get_datapoint()
+        ecDrVal = self._ecDr.get_datapoint()
+        drainage = self._dr.get_datapoint()
+        timestamp = datetime.now()
+        self.record_data_point(timestamp, phInVal, ecInVal, phDrVal, ecDrVal, drainage)
 
     def record_data_point(self, timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading):
         if (isinstance(timestamp, float)):
@@ -10,6 +38,16 @@ class SmartLysimeterController():
         if (isinstance(timestamp, datetime)):
             timestamp = (timestamp.replace(microsecond=0)).isoformat()
         self._model.record_data_point(timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading)
+
+    def calibrate_sensor(self, sensorType: Sensor, calType: Calibration, calVal):
+        if (sensorType == Sensor.PH_IN):
+            self._phIn.calibrate(calType, calVal)
+        elif (sensorType == Sensor.PH_DR):
+            self._phDr.calibrate(calType, calVal)
+        elif (sensorType == Sensor.EC_IN):
+            self._ecDr.calibrate(calType, calVal)
+        elif (sensorType == Sensor.EC_DR):
+            self._ecDr.calibrate(calType, calVal)
 
     def get_history_length(self) -> int:
         return self._model.get_history_length()
