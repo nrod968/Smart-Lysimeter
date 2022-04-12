@@ -30,4 +30,7 @@ class ECSensor(SmartLysimeterSensor):
                 return lines[-1 * (i + 1)].decode('utf-8')
 
     def calibrate(self, calType, calVal):
-        self._backend.send_cmd(str(calType).format(calVal))
+        if (calType == ECCommand.CAL_DRY):
+            self._backend.send_cmd(calType)
+        else:
+            self._backend.send_cmd(str(calType).format(calVal))
