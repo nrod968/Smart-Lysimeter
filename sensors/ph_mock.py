@@ -7,3 +7,6 @@ class MockPHSensor(SmartLysimeterSensor):
 
     def get_datapoint(self):
         return self._randgen.gauss(mu=5.85, sigma=0.15)
+
+    def calibrate(self):
+        pass

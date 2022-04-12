@@ -28,3 +28,6 @@ class ECSensor(SmartLysimeterSensor):
         for i in range(len(lines)):
             if lines[-1 * (i + 1)][0] != b'*'[0]:
                 return lines[-1 * (i + 1)].decode('utf-8')
+
+    def calibrate(self, calType, calVal):
+        self._backend.send_cmd(str(calType).format(calVal))

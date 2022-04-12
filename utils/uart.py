@@ -57,7 +57,7 @@ class UART(EZODataProtocol):
 			print( "Error, ", e)
 			return None	
 
-	def send_cmd(self, cmd):
+	def send_cmd(self, cmd: str):
 		"""
 		Send command to the Atlas Sensor.
 		Before sending, add Carriage Return at the end of the command.

@@ -7,3 +7,6 @@ class MockECSensor(SmartLysimeterSensor):
 
     def get_datapoint(self):
         return self._randgen.gauss(mu=2.1, sigma=0.15)
+    
+    def calibrate(self):
+        pass

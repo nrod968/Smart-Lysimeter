@@ -7,3 +7,6 @@ class MockDRSensor(SmartLysimeterSensor):
 
     def get_datapoint(self):
         return self._randgen.gauss(mu=35.0, sigma=2.0)
+
+    def calibrate(self):
+        pass

@@ -5,6 +5,7 @@ from sensors.ec_ezo import ECSensor
 from sensors.ec_mock import MockECSensor
 from sensors.ph_ezo import PHSensor
 from sensors.ph_mock import MockPHSensor
+from sensors.sensor import Calibration, Sensor
 from utils.data_protocol import Protocol
 from utils.uart import Port
 class SmartLysimeterController():
@@ -37,6 +38,16 @@ class SmartLysimeterController():
         if (isinstance(timestamp, datetime)):
             timestamp = (timestamp.replace(microsecond=0)).isoformat()
         self._model.record_data_point(timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading)
+
+    def calibrate_sensor(self, sensorType: Sensor, calType: Calibration, calVal):
+        if (sensorType == Sensor.PH_IN):
+            self._phIn.calibrate(calType, calVal)
+        elif (sensorType == Sensor.PH_DR):
+            self._phDr.calibrate(calType, calVal)
+        elif (sensorType == Sensor.EC_IN):
+            self._ecDr.calibrate(calType, calVal)
+        elif (sensorType == Sensor.EC_DR):
+            self._ecDr.calibrate(calType, calVal)
 
     def get_history_length(self) -> int:
         return self._model.get_history_length()
