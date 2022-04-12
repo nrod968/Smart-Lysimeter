@@ -4,7 +4,7 @@ from sensors.sensor import SmartLysimeterSensor
 from utils.data_protocol import Protocol
 from utils.uart import UART
 
-class Command(str, Enum):
+class ECCommand(str, Enum):
     READ = "R"
     STOP_CONTINUOUS = "C,0"
     CAL_DRY = "Cal,dry"
@@ -20,10 +20,10 @@ class ECSensor(SmartLysimeterSensor):
             self._backend = UART(port)
 
     def get_datapoint(self):
-        self._backend.send_cmd(Command.STOP_CONTINUOUS)
+        self._backend.send_cmd(ECCommand.STOP_CONTINUOUS)
         time.sleep(1)
         self._backend._ser.flush()
-        self._backend.send_cmd(Command.READ)
+        self._backend.send_cmd(ECCommand.READ)
         lines = self._backend.read_lines()
         for i in range(len(lines)):
             if lines[-1 * (i + 1)][0] != b'*'[0]:
