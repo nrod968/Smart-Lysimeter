@@ -24,11 +24,11 @@ class SmartLysimeterController():
         self._dr = MockDRSensor()
 
     def generate_datapoint(self):
-        phInVal = self._phIn.get_datapoint()
-        ecInVal = self._ecIn.get_datapoint()
-        phDrVal = self._phDr.get_datapoint()
-        ecDrVal = self._ecDr.get_datapoint()
-        drainage = self._dr.get_datapoint()
+        phInVal = self._phIn.read()
+        ecInVal = self._ecIn.read()
+        phDrVal = self._phDr.read()
+        ecDrVal = self._ecDr.read()
+        drainage = self._dr.read()
         timestamp = datetime.now()
         self.record_data_point(timestamp, phInVal, ecInVal, phDrVal, ecDrVal, drainage)
 

@@ -19,7 +19,7 @@ class PHSensor(SmartLysimeterSensor):
         if (protocol == Protocol.UART):
             self._backend = UART(port)
 
-    def get_datapoint(self):
+    def read(self):
         self._backend.send_cmd(PHCommand.STOP_CONTINUOUS)
         time.sleep(1)
         self._backend._ser.flush()

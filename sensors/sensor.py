@@ -25,7 +25,7 @@ class SmartLysimeterSensor(metaclass=abc.ABCMeta):
                 callable(subclass.calibrate))
 
     @abc.abstractmethod
-    def get_datapoint(self):
+    def read(self):
         raise NotImplementedError
 
     @abc.abstractmethod
