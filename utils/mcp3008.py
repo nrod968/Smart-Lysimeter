@@ -19,6 +19,7 @@ class MCP3008:
     def close(self):
         self.spi.close()
 
+### REMOVE FOR IMPLEMENTATION ###
 class SpiDev:
     def __init__(self):
         self.max_speed_hz = 0
