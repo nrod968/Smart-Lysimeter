@@ -1,4 +1,4 @@
-from spidev import SpiDev
+#from spidev import SpiDev
  
 class MCP3008:
     def __init__(self, bus = 0, device = 0):
@@ -18,3 +18,13 @@ class MCP3008:
             
     def close(self):
         self.spi.close()
+
+class SpiDev:
+    def __init__(self):
+        self.max_speed_hz = 0
+    
+    def open(self, x, y):
+        pass
+
+    def xfer2(self, x):
+        pass

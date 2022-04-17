@@ -50,9 +50,10 @@ class SmartLysimeterModel(Observable):
         self.notify(SmartLysimeterMessage.NEW_READING)
 
     def save_last_reading_csv(self):
-        with open(self._csvFileName, 'w', newline='') as csvfile:
+        with open(self._csvFileName, 'r+', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=SmartLysimeterModel.fieldnames)
-            writer.writeheader()
+            if (csvfile.readline() == ''):
+                writer.writeheader()
             writer.writerow(self._lastDataPoint)
     def save_last_reading_db(self):
         self._currRecord = self._db.insert(self._lastDataPoint)

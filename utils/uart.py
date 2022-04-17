@@ -5,15 +5,6 @@ from serial import SerialException, Serial
 
 from utils.data_protocol import EZODataProtocol, Protocol
 
-class Port(str, Enum):
-	UART0 = "/dev/ttyAMA0"
-	UART2 = "/dev/ttyAMA1"
-	UART3 = "/dev/ttyAMA2"
-	UART5 = "/dev/ttyAMA3"
-
-	def __str__(self) -> str:
-		return str.__str__(self)
-
 class UART(EZODataProtocol):
 	def __init__(self, port):
 		self._port = str(port)

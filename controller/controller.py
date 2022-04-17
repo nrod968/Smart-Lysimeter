@@ -3,11 +3,11 @@ from model.model import SmartLysimeterModel, Fieldnames
 from sensors.dr_mock import MockDRSensor
 from sensors.ec_ezo import ECSensor
 from sensors.ec_mock import MockECSensor
+from sensors.level_sensor import LevelSensor
 from sensors.ph_ezo import PHSensor
 from sensors.ph_mock import MockPHSensor
 from sensors.sensor import Calibration, Sensor
-from utils.data_protocol import Protocol
-from utils.uart import Port
+from utils.data_protocol import Protocol, Port
 class SmartLysimeterController():
     def __init__(self, model: SmartLysimeterModel, isTest=False):
         self._model = model
@@ -16,12 +16,14 @@ class SmartLysimeterController():
             self._phDr = MockPHSensor()
             self._ecIn = MockECSensor()
             self._ecDr = MockECSensor()
+            self._dr = MockDRSensor()
         else:
             self._phIn = PHSensor(Protocol.UART, Port.UART0)
             self._phDr = PHSensor(Protocol.UART, Port.UART5)
             self._ecIn = ECSensor(Protocol.UART, Port.UART2)
             self._ecDr = ECSensor(Protocol.UART, Port.UART3)
-        self._dr = MockDRSensor()
+            self._levIn = LevelSensor(channelRef=0, channelSense=1)
+            self._levDr = LevelSensor(channelRef=2, channelSense=3)
 
     def generate_datapoint(self):
         phInVal = self._phIn.read()
@@ -29,6 +31,9 @@ class SmartLysimeterController():
         phDrVal = self._phDr.read()
         ecDrVal = self._ecDr.read()
         drainage = self._dr.read()
+        #levInVal = self._levIn.read()
+        #levDrVal = self._levDr.read()
+        #drainage = (abs(levDrVal - levInVal)) / levInVal
         timestamp = datetime.now()
         self.record_data_point(timestamp, phInVal, ecInVal, phDrVal, ecDrVal, drainage)
 

@@ -4,6 +4,15 @@ from enum import Enum, auto
 class Protocol(Enum):
     UART = auto()
 
+class Port(str, Enum):
+	UART0 = "/dev/ttyAMA0"
+	UART2 = "/dev/ttyAMA1"
+	UART3 = "/dev/ttyAMA2"
+	UART5 = "/dev/ttyAMA3"
+
+	def __str__(self) -> str:
+		return str.__str__(self)
+
 class EZODataProtocol(metaclass=abc.ABCMeta):
     
     @classmethod
