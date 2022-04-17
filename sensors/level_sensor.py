@@ -18,6 +18,7 @@ class LevelSensor(SmartLysimeterSensor):
         senseVal = (LevelSensor.RESISTOR_VAL / (senseVout / LevelSensor.V_IN)) - LevelSensor.RESISTOR_VAL
         sensorValue = refVal - senseVal
         sensorValue = sensorValue / LevelSensor.RESISTOR_GRADIENT
+        return sensorValue
     
     def calibrate(self):
         pass
