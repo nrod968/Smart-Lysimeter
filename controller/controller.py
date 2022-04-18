@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import sleep
 from model.model import SmartLysimeterModel, Fieldnames
 from devices.dr_mock import MockDRSensor
 from devices.ec_ezo import ECSensor
@@ -15,6 +16,7 @@ class SmartLysimeterController():
         self._model = model
         self._pumpIn = Pump(Pump.INPUT_PIN)
         self._pumpDr = Pump(Pump.DRAINAGE_PIN)
+        self._isTest = isTest
         if (isTest):
             self._phIn = MockPHSensor()
             self._phDr = MockPHSensor()
@@ -61,8 +63,19 @@ class SmartLysimeterController():
     def shutdown(self):
         os.system("sudo shutdown -h now")
     
-    def drain_tanks(self):
-        
+    def drain_tanks(self):  #Cool graphic?
+        keepPumpingIn = True
+        keepPumpingDr = True
+        self._pumpIn.start()
+        self._pumpDr.start()
+        while(keepPumpingIn or keepPumpingDr):
+            if (self._levIn.read() <= 0.5):
+                keepPumpingIn = False
+                self._pumpIn.stop()
+            if (self._levDr.read() <= 0.5):
+                keepPumpingDr = False
+                self._pumpDr.stop()
+            sleep(0.1)
 
     def get_history_length(self) -> int:
         return self._model.get_history_length()
