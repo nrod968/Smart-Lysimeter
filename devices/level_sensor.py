@@ -1,5 +1,5 @@
-from sensors.sensor import SmartLysimeterSensor
-from utils.mcp3008 import MCP3008
+from devices.sensor import SmartLysimeterSensor
+from devices.mcp3008 import MCP3008
 
 class LevelSensor(SmartLysimeterSensor):
     RESISTOR_GRADIENT = 150

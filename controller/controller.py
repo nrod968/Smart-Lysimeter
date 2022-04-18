@@ -1,16 +1,20 @@
 from datetime import datetime
 from model.model import SmartLysimeterModel, Fieldnames
-from sensors.dr_mock import MockDRSensor
-from sensors.ec_ezo import ECSensor
-from sensors.ec_mock import MockECSensor
-from sensors.level_sensor import LevelSensor
-from sensors.ph_ezo import PHSensor
-from sensors.ph_mock import MockPHSensor
-from sensors.sensor import Calibration, Sensor
+from devices.dr_mock import MockDRSensor
+from devices.ec_ezo import ECSensor
+from devices.ec_mock import MockECSensor
+from devices.level_sensor import LevelSensor
+from devices.ph_ezo import PHSensor
+from devices.ph_mock import MockPHSensor
+from devices.sensor import Calibration, Sensor
 from utils.data_protocol import Protocol, Port
+from devices.pump import Pump
+import os
 class SmartLysimeterController():
     def __init__(self, model: SmartLysimeterModel, isTest=False):
         self._model = model
+        self._pumpIn = Pump(Pump.INPUT_PIN)
+        self._pumpDr = Pump(Pump.DRAINAGE_PIN)
         if (isTest):
             self._phIn = MockPHSensor()
             self._phDr = MockPHSensor()
@@ -53,6 +57,12 @@ class SmartLysimeterController():
             self._ecDr.calibrate(calType, calVal)
         elif (sensorType == Sensor.EC_DR):
             self._ecDr.calibrate(calType, calVal)
+    
+    def shutdown(self):
+        os.system("sudo shutdown -h now")
+    
+    def drain_tanks(self):
+        
 
     def get_history_length(self) -> int:
         return self._model.get_history_length()

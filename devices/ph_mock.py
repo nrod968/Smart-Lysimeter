@@ -1,5 +1,5 @@
 from random import Random
-from sensors.sensor import SmartLysimeterSensor
+from devices.sensor import SmartLysimeterSensor
 
 class MockPHSensor(SmartLysimeterSensor):
     def __init__(self):

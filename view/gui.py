@@ -92,6 +92,9 @@ class SmartLysimeterView(Observer):
         self._phWindow.set_history_length(self._historyLength, timestamps, ph)
         self._ecWindow.set_history_length(self._historyLength, timestamps, ec)
         self._drainageWindow.set_history_length(self._historyLength, timestamps, drainage)
+    
+    def shutdown(self):
+        self._controller.shutdown()
 
     def init_gui(self):
         self._canvas.place(x = 0, y = 0)

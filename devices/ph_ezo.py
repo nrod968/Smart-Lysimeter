@@ -1,6 +1,6 @@
 from enum import Enum
 import time
-from sensors.sensor import SmartLysimeterSensor
+from devices.sensor import SmartLysimeterSensor
 from utils.data_protocol import Protocol
 from utils.uart import UART
 
