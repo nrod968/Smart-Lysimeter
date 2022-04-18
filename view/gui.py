@@ -1,5 +1,6 @@
 from os import system
 from pathlib import Path
+import sys
 
 from controller.controller import SmartLysimeterController
 from model.constants import *
@@ -33,7 +34,7 @@ class SmartLysimeterView(Observer):
 
         self._home = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH_DR, self._controller.get_pH_dr_history(), Fieldnames.EC_DR, self._controller.get_EC_dr_history())
         self._systemHealth = SmartLysimeterSystemHealth(self._root)
-        self._settings = SmartLysimeterSettings()
+        self._settings = SmartLysimeterSettings(self._root, self._controller)
         self._phWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH_DR, self._controller.get_pH_dr_history(), Fieldnames.PH_IN, self._controller.get_pH_in_history())
         self._ecWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.EC_DR, self._controller.get_EC_dr_history(), Fieldnames.EC_IN, self._controller.get_EC_in_history())
         self._drainageWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.DRAINAGE, self._controller.get_drainage_history())
@@ -44,8 +45,8 @@ class SmartLysimeterView(Observer):
             pass
         self._canvas.delete("health||settings||home||pH||EC||drainage")
         self._currWindow.unplace()
-        window.place(self._canvas, self._root)
         self._currWindow = window
+        window.place(self._canvas, self._root)
 
     def update(self, message):
         if (message is SmartLysimeterMessage.HISTORY_LEN_CHANGED):
@@ -93,6 +94,10 @@ class SmartLysimeterView(Observer):
         self._ecWindow.set_history_length(self._historyLength, timestamps, ec)
         self._drainageWindow.set_history_length(self._historyLength, timestamps, drainage)
 
+    def exit(self):
+        self._root.destroy()
+        sys.exit(0)
+
     def init_gui(self):
         self._canvas.place(x = 0, y = 0)
         self._home.place(self._canvas, self._root)
@@ -101,6 +106,16 @@ class SmartLysimeterView(Observer):
         self._root.geometry("800x480")
         self._root.configure(bg = "#FFFFFF")
         self._root.wm_title("Smart Lysimeter")
+
+        exit_button_image = PhotoImage(file=self.relative_to_assets("exit_small.png"))
+        exit_button = Button(
+            image=exit_button_image,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.exit(),
+            relief="flat"
+        )
+        exit_button.place(x=780, y=0, width=20, height=20)
 
         button_image_1 = PhotoImage(file=self.relative_to_assets("button_1.png"))
         button_1 = Button(
@@ -192,7 +207,7 @@ class SmartLysimeterView(Observer):
         # calls itself every 200 milliseconds
         # to update the time display as needed
         # could use >200 ms, but display gets jerky
-        self._timeLbl.after(500, self.tick)
+        self._timeLbl.after(2000, self.tick)
 
     def relative_to_assets(self, path: str) -> Path:
         return ASSETS_PATH / Path(path)

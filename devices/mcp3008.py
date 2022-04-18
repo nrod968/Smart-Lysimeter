@@ -1,6 +1,7 @@
 #from spidev import SpiDev
  
 class MCP3008:
+    RESOLUTION = 1024
     def __init__(self, bus = 0, device = 0):
         self.bus, self.device = bus, device
         self.spi = SpiDev()
