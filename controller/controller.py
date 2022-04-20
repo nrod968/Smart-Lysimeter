@@ -28,20 +28,33 @@ class SmartLysimeterController():
             self._phDr = PHSensor(Protocol.UART, Port.UART5)
             self._ecIn = ECSensor(Protocol.UART, Port.UART2)
             self._ecDr = ECSensor(Protocol.UART, Port.UART3)
-            self._levIn = LevelSensor(channelRef=0, channelSense=1)
-            self._levDr = LevelSensor(channelRef=2, channelSense=3)
+            #self._dr = MockDRSensor()
+            self._levIn = LevelSensor(channelRef=0, channelSense=1, bus=1, device=0)
+            self._levDr = LevelSensor(channelRef=2, channelSense=3, bus=1, device=0)
 
     def generate_datapoint(self):
+        file = open("log.txt", 'w')
         phInVal = self._phIn.read()
+        file.write("pH In: " + phInVal)
         ecInVal = self._ecIn.read()
+        file.write("EC In: " + ecInVal)
         phDrVal = self._phDr.read()
+        file.write("pH Dr: " + phDrVal)
         ecDrVal = self._ecDr.read()
-        drainage = self._dr.read()
-        #levInVal = self._levIn.read()
-        #levDrVal = self._levDr.read()
-        #drainage = (abs(levDrVal - levInVal)) / levInVal
+        file.write("EC Dr: " + ecDrVal)
+        if (self._isTest):
+            drainage = self._dr.read()
+            file.write("Drainage: " + drainage)
+        else:
+            levInVal = self._levIn.read1()
+            levDrVal = self._levDr.read1()
+            drainage = ((abs(levDrVal - levInVal)) / levInVal) * 100
+        file.write("Drainage: " + str(drainage))
         timestamp = datetime.now()
-        self.record_data_point(timestamp, phInVal, ecInVal, phDrVal, ecDrVal, drainage)
+        file.write("Timestamp: " + str(timestamp))
+        self.record_data_point(timestamp, float(phInVal), float(ecInVal), float(phDrVal), float(ecDrVal), drainage)
+        file.write("Finished")
+        file.close()
 
     def record_data_point(self, timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading):
         if (isinstance(timestamp, float)):

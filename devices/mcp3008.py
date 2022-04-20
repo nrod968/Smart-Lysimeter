@@ -1,4 +1,4 @@
-#from spidev import SpiDev
+from spidev import SpiDev
  
 class MCP3008:
     RESOLUTION = 1024
@@ -21,12 +21,12 @@ class MCP3008:
         self.spi.close()
 
 ### REMOVE FOR IMPLEMENTATION ###
-class SpiDev:
-    def __init__(self):
-        self.max_speed_hz = 0
-    
-    def open(self, x, y):
-        pass
-
-    def xfer2(self, x):
-        pass
+#class SpiDev:
+#    def __init__(self):
+#        self.max_speed_hz = 0
+#    
+#    def open(self, x, y):
+#        pass
+#
+#    def xfer2(self, x):
+#        pass

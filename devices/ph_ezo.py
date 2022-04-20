@@ -20,14 +20,16 @@ class PHSensor(SmartLysimeterSensor):
             self._backend = UART(port)
 
     def read(self):
-        self._backend.send_cmd(PHCommand.STOP_CONTINUOUS)
+        self._backend.send_cmd(str(PHCommand.STOP_CONTINUOUS))
         time.sleep(1)
         self._backend._ser.flush()
-        self._backend.send_cmd(PHCommand.READ)
-        lines = self._backend.read_lines()
-        for i in range(len(lines)):
-            if lines[-1 * (i + 1)][0] != b'*'[0]:
-                return lines[-1 * (i + 1)].decode('utf-8')
+        self._backend.send_cmd(str(PHCommand.READ))
+        while(True):
+            lines = self._backend.read_lines()
+            for i in range(len(lines)):
+                if lines[-1 * (i + 1)][0] != b'*'[0]:
+                    return lines[-1 * (i + 1)].decode('utf-8')
+            time.sleep(0.1)
     
     def calibrate(self, calType, calVal):
         self._backend.send_cmd(str(calType).format(calVal))

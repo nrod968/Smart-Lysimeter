@@ -4,13 +4,13 @@ from controller.controller import SmartLysimeterController
 from model.model import SmartLysimeterModel
 from view.gui import SmartLysimeterView
 
-TEST = True
+TEST = False
 
 def collect_data(controller):
     sleep(1)
     while(True):
         controller.generate_datapoint()
-        sleep(1)
+        sleep(5)
 
 def main():
     model = SmartLysimeterModel("db.json", "data.csv")
