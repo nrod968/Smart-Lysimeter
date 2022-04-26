@@ -6,7 +6,7 @@ class MockPHSensor(SmartLysimeterSensor):
         self._randgen = Random()
 
     def read(self):
-        return self._randgen.gauss(mu=5.85, sigma=0.15)
+        return self._randgen.gauss(mu=5.85, sigma=0.05)
 
     def calibrate(self):
         pass

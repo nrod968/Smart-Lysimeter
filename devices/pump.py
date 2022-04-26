@@ -2,7 +2,7 @@ from gpiozero import DigitalOutputDevice
 
 class Pump:
     INPUT_PIN = 17
-    DRAINAGE_PIN = 18
+    DRAINAGE_PIN = 6
     def __init__(self, pin):
         self._pin = pin
         self._backend = DigitalOutputDevice(pin)

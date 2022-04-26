@@ -17,15 +17,15 @@ class SmartLysimeterSettings(SmartLysimeterWindow):
         self._controller.shutdown()
 
     def drain_tanks(self):
-        self._drainWindow = Toplevel(self._root)
-        self._drainWindow.geometry("100x50")
-        self._drainWindow.focus_set()
-        self._root.attributes('-disabled', True)
-        self._drainWindow.attributes('-topmost', True)
-        drainLabel = Label(self._drainWindow, text="Draining", font=("RobotoRoman Regular", 18 * -1))
-        drainLabel.place(x=50, y=25, anchor=CENTER)
-        self._drainWindow.protocol("WM_DELETE_WINDOW", self.close_drain_window)
-        #self._controller.drain_tanks()
+        #self._drainWindow = Toplevel(self._root)
+        #self._drainWindow.geometry("100x50")
+        #self._drainWindow.focus_set()
+        #self._root.attributes('-disabled', True)
+        #self._drainWindow.attributes('-topmost', True)
+        #drainLabel = Label(self._drainWindow, text="Draining", font=("RobotoRoman Regular", 18 * -1))
+        #drainLabel.place(x=50, y=25, anchor=CENTER)
+        #self._drainWindow.protocol("WM_DELETE_WINDOW", self.close_drain_window)
+        self._controller.drain_tanks()
     
     def close_drain_window(self, event=None):
         self._root.attributes('-disabled', False)

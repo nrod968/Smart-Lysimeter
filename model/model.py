@@ -39,6 +39,8 @@ class SmartLysimeterModel(Observable):
         return self._historyLength
 
     def record_data_point(self, timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading):
+        if (drainageReading is None):
+            drainageReading = 0.00
         self._lastDataPoint =  {str(Fieldnames.TIMESTAMP): timestamp,
                                 str(Fieldnames.PH_IN): round(phInReading, 2),
                                 str(Fieldnames.EC_IN): round(ecInReading, 2),

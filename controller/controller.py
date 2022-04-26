@@ -24,36 +24,55 @@ class SmartLysimeterController():
             self._ecDr = MockECSensor()
             self._dr = MockDRSensor()
         else:
-            self._phIn = PHSensor(Protocol.UART, Port.UART0)
-            self._phDr = PHSensor(Protocol.UART, Port.UART5)
-            self._ecIn = ECSensor(Protocol.UART, Port.UART2)
-            self._ecDr = ECSensor(Protocol.UART, Port.UART3)
+            #self._phIn = PHSensor(Protocol.UART, Port.UART0)
+            #self._phDr = PHSensor(Protocol.UART, Port.UART5)
+            #self._ecIn = ECSensor(Protocol.UART, Port.UART2)
+            #self._ecDr = ECSensor(Protocol.UART, Port.UART3)
+            self._phIn = MockPHSensor()
+            self._phDr = MockPHSensor()
+            self._ecIn = MockECSensor()
+            self._ecDr = MockECSensor()
             #self._dr = MockDRSensor()
             self._levIn = LevelSensor(channelRef=0, channelSense=1, bus=1, device=0)
             self._levDr = LevelSensor(channelRef=2, channelSense=3, bus=1, device=0)
 
     def generate_datapoint(self):
-        file = open("log.txt", 'w')
+        file = open("log.txt", 'a')
         phInVal = self._phIn.read()
-        file.write("pH In: " + phInVal)
+        file.write("pH In: " + str(phInVal) + "\n")
         ecInVal = self._ecIn.read()
-        file.write("EC In: " + ecInVal)
+        file.write("EC In: " + str(ecInVal) + "mS/cm\n")
         phDrVal = self._phDr.read()
-        file.write("pH Dr: " + phDrVal)
+        file.write("pH Dr: " + str(phDrVal) + "\n")
         ecDrVal = self._ecDr.read()
-        file.write("EC Dr: " + ecDrVal)
+        file.write("EC Dr: " + str(ecDrVal) + "mS/cm\n")
         if (self._isTest):
             drainage = self._dr.read()
-            file.write("Drainage: " + drainage)
+            file.write("Drainage: " + str(drainage))
         else:
-            levInVal = self._levIn.read1()
-            levDrVal = self._levDr.read1()
-            drainage = ((abs(levDrVal - levInVal)) / levInVal) * 100
-        file.write("Drainage: " + str(drainage))
+            levInVal = []
+            levInVal.append(self._levIn.read1())
+            levInVal.append(self._levIn.read1())
+            levInVal.append(self._levIn.read1())
+            levInVal = sum(levInVal) / 3.0
+            file.write("In Val: " + str(levInVal) + "inches\n")
+            levDrVal = []
+            levDrVal.append(self._levDr.read1())
+            levDrVal.append(self._levDr.read1())
+            levDrVal.append(self._levDr.read1())
+            levDrVal = sum(levDrVal) / 3.0
+            file.write("Dr Val: " + str(levDrVal) + "inches\n")
+            if (levDrVal >= 4.0 or levInVal >= 4.0):
+                drainage = ((abs(levDrVal - levInVal)) / levInVal) * 100
+                file.write("Draining\n")
+                self.drain_tanks()
+            else:
+                drainage = None
+        file.write("Drainage: " + str(drainage) + "%\n")
         timestamp = datetime.now()
-        file.write("Timestamp: " + str(timestamp))
+        file.write("Timestamp: " + str(timestamp) + "\n")
         self.record_data_point(timestamp, float(phInVal), float(ecInVal), float(phDrVal), float(ecDrVal), drainage)
-        file.write("Finished")
+        file.write("Finished\n")
         file.close()
 
     def record_data_point(self, timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading):
@@ -82,10 +101,12 @@ class SmartLysimeterController():
         self._pumpIn.start()
         self._pumpDr.start()
         while(keepPumpingIn or keepPumpingDr):
-            if (self._levIn.read() <= 0.5):
+            inVal = self._levIn.read1()
+            if (inVal <= 0.5):
                 keepPumpingIn = False
                 self._pumpIn.stop()
-            if (self._levDr.read() <= 0.5):
+            drVal = self._levDr.read1()
+            if (drVal <= 0.5):
                 keepPumpingDr = False
                 self._pumpDr.stop()
             sleep(0.1)

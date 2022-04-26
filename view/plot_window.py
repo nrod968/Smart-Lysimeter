@@ -135,6 +135,8 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
         self._graphFrame.place_forget()
 
     def add_data_point(self, timestamp, data1, data2=None):
+        if (self._dataName1 == Fieldnames.DRAINAGE and data1 < 1.0):
+            return
         self._timestamps.append(timestamp)
         self._data1.append(data1)
         if(self._isData2):

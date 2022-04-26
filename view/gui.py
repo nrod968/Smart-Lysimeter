@@ -63,7 +63,8 @@ class SmartLysimeterView(Observer):
 
         self._phTxt.set("pH: {0:.3g}".format(reading[Fieldnames.PH_DR]))
         self._ecTxt.set("EC: {0:.3g} uS/cm".format(reading[Fieldnames.EC_DR]))
-        self._drainageTxt.set("Drainage Rate: {0:.3g}%".format(reading[Fieldnames.DRAINAGE]))
+        if (reading[Fieldnames.DRAINAGE] >= 1.0):
+            self._drainageTxt.set("Drainage Rate: {0:.3g}%".format(reading[Fieldnames.DRAINAGE]))
 
         if (reading[Fieldnames.PH_DR] > PH_MAX): self._systemHealth.change_status(Status.PH_DR_MAX_REACHED)
         elif (reading[Fieldnames.PH_DR] < PH_MIN): self._systemHealth.change_status(Status.PH_DR_MIN_REACHED)
@@ -77,7 +78,9 @@ class SmartLysimeterView(Observer):
         if (reading[Fieldnames.EC_IN] > EC_MAX): self._systemHealth.change_status(Status.EC_IN_MAX_REACHED)
         elif (reading[Fieldnames.EC_IN] < EC_MIN): self._systemHealth.change_status(Status.EC_IN_MIN_REACHED)
         else: self._systemHealth.change_status(Status.EC_IN_WITHIN_LIMITS)
-        if (reading[Fieldnames.DRAINAGE] > DR_MAX): self._systemHealth.change_status(Status.DR_MAX_REACHED)
+        if (reading[Fieldnames.DRAINAGE] <= 1.0):
+            a=0
+        elif (reading[Fieldnames.DRAINAGE] > DR_MAX): self._systemHealth.change_status(Status.DR_MAX_REACHED)
         elif (reading[Fieldnames.DRAINAGE] < DR_MIN): self._systemHealth.change_status(Status.DR_MIN_REACHED)
         else: self._systemHealth.change_status(Status.DR_WITHIN_LIMITS)
         self._systemHealth.change_status(Status.TANK_WITHIN_LIMITS)

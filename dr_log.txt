@@ -1,1 +1,280 @@
-Started
+Pumping in
+Pumping out
+in loop
+In Val: 7.218332377296324 inches
+Dr Val: 5.293609571053401 inches
+in loop
+In Val: 6.970660694288911 inches
+Dr Val: 5.601113596818299 inches
+in loop
+In Val: 7.065116279069768 inches
+Dr Val: 5.634540817177052 inches
+in loop
+In Val: 7.40133056133056 inches
+Dr Val: 5.381986636971044 inches
+in loop
+In Val: 7.150191570881226 inches
+Dr Val: 5.232116133373925 inches
+in loop
+In Val: 7.344615384615384 inches
+Dr Val: 5.362999999999999 inches
+in loop
+In Val: 6.89528385707279 inches
+Dr Val: 5.540186067619693 inches
+in loop
+In Val: 7.081557237533046 inches
+Dr Val: 5.305528089887639 inches
+in loop
+In Val: 7.1911547696372145 inches
+Dr Val: 5.489128609262968 inches
+in loop
+In Val: 6.647033828544549 inches
+Dr Val: 5.106416978776529 inches
+in loop
+In Val: 6.750869728444497 inches
+Dr Val: 5.293609571053401 inches
+in loop
+In Val: 6.814591593973037 inches
+Dr Val: 5.331667796391337 inches
+in loop
+In Val: 6.461820055526073 inches
+Dr Val: 5.394614543019972 inches
+in loop
+In Val: 6.672380952380951 inches
+Dr Val: 5.548917341522409 inches
+in loop
+In Val: 6.8790058203555144 inches
+Dr Val: 5.097405514502427 inches
+in loop
+In Val: 6.766874287765963 inches
+Dr Val: 5.232116133373925 inches
+in loop
+In Val: 6.774817020029461 inches
+Dr Val: 5.220596205962059 inches
+in loop
+In Val: 6.572945761118438 inches
+Dr Val: 5.548917341522409 inches
+in loop
+In Val: 6.680901382629289 inches
+Dr Val: 5.497104882221345 inches
+in loop
+In Val: 6.8061174482467255 inches
+Dr Val: 5.288571974278984 inches
+in loop
+In Val: 6.948556430446194 inches
+Dr Val: 5.5679889298892995 inches
+in loop
+In Val: 1.1678268499561273 inches
+Dr Val: 5.232116133373925 inches
+in loop
+In Val: 0.3793297199125967 inches
+in pump off
+Dr Val: 5.243654043402064 inches
+in loop
+In Val: 0.26689028651292573 inches
+in pump off
+Dr Val: 5.502632478632477 inches
+in loop
+In Val: 0.5319294140586938 inches
+Dr Val: 5.274452459868721 inches
+in loop
+In Val: 0.4254901960784309 inches
+in pump off
+Dr Val: 5.4136861313868625 inches
+in loop
+In Val: 0.4804965332140455 inches
+in pump off
+Dr Val: 5.5679889298892995 inches
+in loop
+In Val: 0.3214814814814781 inches
+in pump off
+Dr Val: 5.300614520657844 inches
+in loop
+In Val: 0.3167182662538668 inches
+in pump off
+Dr Val: 5.502632478632477 inches
+in loop
+In Val: 0.3214814814814781 inches
+in pump off
+Dr Val: 5.356820554506262 inches
+in loop
+In Val: 0.1601252201134806 inches
+in pump off
+Dr Val: 5.554065359477125 inches
+in loop
+In Val: 0.15893466500207523 inches
+in pump off
+Dr Val: 5.182875525859934 inches
+in loop
+In Val: 0.2688971499380447 inches
+in pump off
+Dr Val: 0.4011764705882388 inches
+dr pump off
+Done
+Pumping in
+Pumping out
+in loop
+In Val: 0.37089900110987856 inches
+in pump off
+Dr Val: 6.106507070351466 inches
+in loop
+In Val: 0.1613292030413959 inches
+in pump off
+Dr Val: 6.199281159420291 inches
+in loop
+In Val: 0.3764878186170927 inches
+in pump off
+Dr Val: 6.053622454149357 inches
+in loop
+In Val: 0.32390348707365924 inches
+in pump off
+Dr Val: 6.075079533404031 inches
+in loop
+In Val: 0.2688971499380447 inches
+in pump off
+Dr Val: 6.069053191181996 inches
+in loop
+In Val: 0.32390348707365924 inches
+in pump off
+Dr Val: 6.087725631768955 inches
+in loop
+In Val: 0.3764878186170927 inches
+in pump off
+Dr Val: 5.87590351917754 inches
+in loop
+In Val: 0.21755315361501742 inches
+in pump off
+Dr Val: 6.320667284522704 inches
+in loop
+In Val: 0.1625468164794029 inches
+in pump off
+Dr Val: 6.269609826165979 inches
+in loop
+In Val: 0.2709267351455628 inches
+in pump off
+Dr Val: 6.2231305758313065 inches
+in loop
+In Val: 0.21430595496949234 inches
+in pump off
+Dr Val: 6.050488888888888 inches
+in loop
+In Val: 0.2688971499380447 inches
+in pump off
+Dr Val: 6.2075120423180365 inches
+in loop
+In Val: 0.21430595496949234 inches
+in pump off
+Dr Val: 6.187999999999999 inches
+in loop
+In Val: 0.21430595496949234 inches
+in pump off
+Dr Val: 6.25417908913334 inches
+in loop
+In Val: 0.3214814814814781 inches
+in pump off
+Dr Val: 6.022573940847323 inches
+in loop
+In Val: 0.4192086054552404 inches
+in pump off
+Dr Val: 6.141144016227178 inches
+in loop
+In Val: 0.32390348707365924 inches
+in pump off
+Dr Val: 6.183973744590633 inches
+in loop
+In Val: 0.1625468164794029 inches
+in pump off
+Dr Val: 0.34227479899626206 inches
+dr pump off
+Done
+Pumping in
+Pumping out
+in loop
+In Val: 6.531714844806465 inches
+Dr Val: 6.019812583668005 inches
+in loop
+In Val: 6.570390641253378 inches
+Dr Val: 6.006955407334053 inches
+in loop
+In Val: 6.384617075046696 inches
+Dr Val: 5.986292585170338 inches
+in loop
+In Val: 6.772668284150538 inches
+Dr Val: 6.199281159420291 inches
+in loop
+In Val: 6.488424019415956 inches
+Dr Val: 6.203492957746477 inches
+in loop
+In Val: 6.514964408414441 inches
+Dr Val: 6.1531741171667695 inches
+in loop
+In Val: 6.455408805031448 inches
+Dr Val: 6.460678142931667 inches
+in loop
+In Val: 6.49338900487126 inches
+Dr Val: 6.341176470588236 inches
+in loop
+In Val: 6.587141077645402 inches
+Dr Val: 6.203492957746477 inches
+in loop
+In Val: 7.393291404612158 inches
+Dr Val: 6.408481887635777 inches
+in loop
+In Val: 6.405366876310274 inches
+Dr Val: 6.118649326548072 inches
+in loop
+In Val: 6.438797809902708 inches
+Dr Val: 6.218923694779115 inches
+in loop
+In Val: 6.565006337135615 inches
+Dr Val: 6.2231305758313065 inches
+in loop
+In Val: 6.426245614035087 inches
+Dr Val: 6.203492957746477 inches
+in loop
+In Val: 6.514964408414441 inches
+Dr Val: 6.187999999999999 inches
+in loop
+In Val: 6.48325556158437 inches
+Dr Val: 6.022573940847323 inches
+in loop
+In Val: 6.263698797555685 inches
+Dr Val: 6.172444444444443 inches
+in loop
+In Val: 6.416415475957458 inches
+Dr Val: 0.4432797709628327 inches
+dr pump off
+in loop
+In Val: 6.659672529775473 inches
+Dr Val: 0.433879477922801 inches
+dr pump off
+in loop
+In Val: 6.159220844927905 inches
+Dr Val: 0.7856718567185681 inches
+in loop
+In Val: 6.3205500479693 inches
+Dr Val: 0.6451016059456378 inches
+in loop
+In Val: 6.7457168089490755 inches
+Dr Val: 0.3447375886524818 inches
+dr pump off
+in loop
+In Val: 6.351186141454262 inches
+Dr Val: 0.2427231359788493 inches
+dr pump off
+in loop
+In Val: 6.553569824876513 inches
+Dr Val: 0.5379843770008983 inches
+in loop
+In Val: 6.367936577846286 inches
+Dr Val: 0.33742774201691494 inches
+dr pump off
+in loop
+In Val: 6.123350912077459 inches
+Dr Val: 0.38428334255672475 inches
+dr pump off
+in loop
+In Val: 0.10714846818538414 inches
+in pump off
+Dr Val: 0.631369058216131 inches
+Done

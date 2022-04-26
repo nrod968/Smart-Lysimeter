@@ -15,12 +15,12 @@ class LevelSensor(SmartLysimeterSensor):
     def read(self):
         refVal = self._backend.read(self._channelRef)
         print("ReferenceADCVal_" + str(self._channelRef) + ": " + str(refVal))
+        senseVal = self._backend.read(self._channelSense)
+        print("SenseADCVal_" + str(self._channelSense) + ": " + str(senseVal))
         refVout = (refVal / (MCP3008.RESOLUTION - 1)) * LevelSensor.V_REF
         print("ReferenceVout_" + str(self._channelRef) + ": " + str(refVout))
         refVal = (LevelSensor.RESISTOR_VAL / (refVout / LevelSensor.V_IN)) - LevelSensor.RESISTOR_VAL
         print("ReferenceRVal_" + str(self._channelRef) + ": " + str(refVal))
-        senseVal = self._backend.read(self._channelSense)
-        print("SenseADCVal_" + str(self._channelSense) + ": " + str(senseVal))
         senseVout = (senseVal / (MCP3008.RESOLUTION - 1)) * LevelSensor.V_REF
         print("SenseVout_" + str(self._channelSense) + ": " + str(senseVout))
         senseVal = (LevelSensor.RESISTOR_VAL / (senseVout / LevelSensor.V_IN)) - LevelSensor.RESISTOR_VAL
@@ -33,13 +33,13 @@ class LevelSensor(SmartLysimeterSensor):
     def read1(self):
         refVal = self._backend.read(self._channelRef)
         print("ReferenceADCVal_" + str(self._channelRef) + ": " + str(refVal))
+        senseVal = self._backend.read(self._channelSense)
+        print("SenseADCVal_" + str(self._channelSense) + ": " + str(senseVal))
         refVout = (((MCP3008.RESOLUTION - 1) / refVal) - 1)
         print("ReferenceIntermediate_" + str(self._channelRef) + ": " + str(refVout))
         refVal = (LevelSensor.RESISTOR_VAL / refVout)
         print("ReferenceRVal_" + str(self._channelRef) + ": " + str(refVal))
 
-        senseVal = self._backend.read(self._channelSense)
-        print("SenseADCVal_" + str(self._channelSense) + ": " + str(senseVal))
         senseVout = (((MCP3008.RESOLUTION - 1) / senseVal) - 1)
         print("SenseIntermediate_" + str(self._channelSense) + ": " + str(senseVout))
         senseVal = (LevelSensor.RESISTOR_VAL / senseVout)
