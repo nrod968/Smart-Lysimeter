@@ -1,5 +1,8 @@
 from tkinter import *
+from tkinter import ttk
+from tkinter.font import Font
 from controller.controller import SmartLysimeterController
+from contextlib import suppress
 # Explicit imports to satisfy Flake8
 #from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from view.window import SmartLysimeterWindow
@@ -17,27 +20,65 @@ class SmartLysimeterSettings(SmartLysimeterWindow):
         self._controller.shutdown()
 
     def drain_tanks(self):
-        #self._drainWindow = Toplevel(self._root)
-        #self._drainWindow.geometry("100x50")
-        #self._drainWindow.focus_set()
-        #self._root.attributes('-disabled', True)
-        #self._drainWindow.attributes('-topmost', True)
-        #drainLabel = Label(self._drainWindow, text="Draining", font=("RobotoRoman Regular", 18 * -1))
-        #drainLabel.place(x=50, y=25, anchor=CENTER)
-        #self._drainWindow.protocol("WM_DELETE_WINDOW", self.close_drain_window)
+        self._drainWindow = Toplevel(self._root)
+        self._drainWindow.geometry("200x100")
+        self._drainWindow.focus_set()
+        self._drainWindow.grab_set()
+        drainLabel = Label(self._drainWindow, text="Draining", font=("RobotoRoman Regular", 18 * -1))
+        drainLabel.place(x=100, y=25, anchor=CENTER)
+        drainBar = ttk.Progressbar(self._drainWindow, length=100, mode='indeterminate', maximum=20)
+        drainBar.place(x=100, y=50, anchor=CENTER)
+        drainBar.start()
+        self._drainWindow.protocol("WM_DELETE_WINDOW", self.close_popup_window)
         self._controller.drain_tanks()
+        #self.close_popup_window()
     
-    def close_drain_window(self, event=None):
-        self._root.attributes('-disabled', False)
-        self._drainWindow.destroy()
+    def close_popup_window(self, event=None):
+        with suppress(Exception): self._drainWindow.destroy()
+        with suppress(Exception): self._calibrateWindow.destroy()
 
     def calibrate_pH(self):
-        calibrateWindow = Toplevel(self._root)
-        calibrateWindow.geometry("700x400")
+        self._calibrateWindow = Toplevel(self._root)
+        self._calibrateWindow.title("pH Calibration")
+        self._calibrateWindow.geometry("315x275")
+        self._calibrateWindow.focus_set()
+        self._calibrateWindow.grab_set()
+        self._calibrateWindow.protocol("WM_DELETE_WINDOW", self.close_popup_window)
+        calTxt = "To calibrate the pH sensor, first enter the midpoint calibration pH value (close to 7.00) and then hit \"Calibrate\". Next, enter the low point calibration pH value (close to 4.00) and hit \"Calibrate\".\n**Note that it must be done in this order to work**"
+        calLbl = Label(self._calibrateWindow, wraplength=300, justify=LEFT, font=Font(family='Helvetica', size=10), text=calTxt)
+        calLbl.place(x=10, y=10, anchor=NW)
+        calMidVal = StringVar(value=7.00)
+        calLowVal = StringVar(value=4.00)
+        calMid = Spinbox(self._calibrateWindow, from_=1.0, to=14.0, increment=0.01, textvariable=calMidVal, width=5, font=Font(family='Helvetica', size=18))
+        calMidLbl = Label(self._calibrateWindow, text="Mid Point:", font=Font(family='Helvetica', size=12))
+        calMidBtn = Button(self._calibrateWindow, text="Calibrate", font=Font(family='Helvetica', size=12))
+        calLow = Spinbox(self._calibrateWindow, from_=1.0, to=14.0, increment=0.01, textvariable=calLowVal, width=5, font=Font(family='Helvetica', size=18))
+        calLowLbl = Label(self._calibrateWindow, text="Low Point:", font=Font(family='Helvetica', size=12))
+        calLowBtn = Button(self._calibrateWindow, text="Calibrate", font=Font(family='Helvetica', size=12))
+        calMidBtn.place(x=150, y=150, anchor=W)
+        calMidLbl.place(x=50, y=120, anchor=W)
+        calMid.place(x=50, y=150, anchor=W)
+        calLowBtn.place(x=150, y=225, anchor=W)
+        calLowLbl.place(x=50, y=195, anchor=W)
+        calLow.place(x=50, y=225, anchor=W)
 
     def calibrate_EC(self):
-        calibrateWindow = Toplevel(self._root)
-        calibrateWindow.geometry("700x400")
+        self._calibrateWindow = Toplevel(self._root)
+        self._calibrateWindow.title("EC Calibration")
+        self._calibrateWindow.geometry("275x150")
+        self._calibrateWindow.focus_set()
+        self._calibrateWindow.grab_set()
+        self._calibrateWindow.protocol("WM_DELETE_WINDOW", self.close_popup_window)
+        calTxt = "To calibrate the EC sensor, enter the calibration EC value (close to 1413 uS/cm) and then hit \"Calibrate\""
+        calDescLbl = Label(self._calibrateWindow, wraplength=265, justify=LEFT, font=Font(family='Helvetica', size=10), text=calTxt)
+        calDescLbl.place(x=10, y=10, anchor=NW)
+        calVal = StringVar(value=1413)
+        calBox = Spinbox(self._calibrateWindow, from_=0, to=2000, increment=1, textvariable=calVal, width=5, font=Font(family='Helvetica', size=18))
+        calLbl = Label(self._calibrateWindow, text="Calibration (uS/cm):", font=Font(family='Helvetica', size=12))
+        calBtn = Button(self._calibrateWindow, text="Calibrate", font=Font(family='Helvetica', size=12))
+        calBtn.place(x=150, y=105, anchor=W)
+        calLbl.place(x=50, y=75, anchor=W)
+        calBox.place(x=50, y=105, anchor=W)
 
     def place(self, canvas: Canvas, root: Tk):
         create_filleted_rectangle(canvas, 235, 70, 775, 100, cornerRadius=10, fill="#D5E8D4", outline="#82B366", text="Settings", font=("RobotoRoman Bold", 22 * -1), tag=("health"))
@@ -46,7 +87,7 @@ class SmartLysimeterSettings(SmartLysimeterWindow):
             image=button_image_7,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_7 clicked"),
+            command=lambda: self.calibrate_pH(),
             relief="flat"
         )
         self._button_7.place(
@@ -61,7 +102,7 @@ class SmartLysimeterSettings(SmartLysimeterWindow):
             image=button_image_8,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_8 clicked"),
+            command=lambda: self.calibrate_EC(),
             relief="flat"
         )
         self._button_8.place(

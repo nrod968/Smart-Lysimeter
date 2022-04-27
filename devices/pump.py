@@ -14,10 +14,10 @@ class Pump:
         self._backend.off()
 
 ### DELETE BEFORE IMPLEMENTATION ###
-#class DigitalOutputDevice:
-#    def __init__(self, pin):
-#        pass
-#    def on(self):
-#        pass
-#    def off(self):
-#        pass
+class DigitalOutputDevice:
+    def __init__(self, pin):
+        pass
+    def on(self):
+        pass
+    def off(self):
+        pass

@@ -4,7 +4,7 @@ from controller.controller import SmartLysimeterController
 from model.model import SmartLysimeterModel
 from view.gui import SmartLysimeterView
 
-TEST = False
+TEST = True
 
 def collect_data(controller):
     sleep(1)

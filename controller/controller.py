@@ -24,14 +24,14 @@ class SmartLysimeterController():
             self._ecDr = MockECSensor()
             self._dr = MockDRSensor()
         else:
-            #self._phIn = PHSensor(Protocol.UART, Port.UART0)
-            #self._phDr = PHSensor(Protocol.UART, Port.UART5)
-            #self._ecIn = ECSensor(Protocol.UART, Port.UART2)
-            #self._ecDr = ECSensor(Protocol.UART, Port.UART3)
-            self._phIn = MockPHSensor()
-            self._phDr = MockPHSensor()
-            self._ecIn = MockECSensor()
-            self._ecDr = MockECSensor()
+            self._phIn = PHSensor(Protocol.UART, Port.UART0)
+            self._phDr = PHSensor(Protocol.UART, Port.UART5)
+            self._ecIn = ECSensor(Protocol.UART, Port.UART2)
+            self._ecDr = ECSensor(Protocol.UART, Port.UART3)
+            #self._phIn = MockPHSensor()
+            #self._phDr = MockPHSensor()
+            #self._ecIn = MockECSensor()
+            #self._ecDr = MockECSensor()
             #self._dr = MockDRSensor()
             self._levIn = LevelSensor(channelRef=0, channelSense=1, bus=1, device=0)
             self._levDr = LevelSensor(channelRef=2, channelSense=3, bus=1, device=0)
@@ -96,6 +96,8 @@ class SmartLysimeterController():
         os.system("sudo shutdown -h now")
     
     def drain_tanks(self):  #Cool graphic?
+        if (self._isTest):
+            return
         keepPumpingIn = True
         keepPumpingDr = True
         self._pumpIn.start()

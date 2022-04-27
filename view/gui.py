@@ -32,7 +32,7 @@ class SmartLysimeterView(Observer):
         self._controller = controller
         self._historyLength = self._controller.get_history_length()
 
-        self._home = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH_DR, self._controller.get_pH_dr_history(), Fieldnames.EC_DR, self._controller.get_EC_dr_history())
+        self._home = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH_IN, self._controller.get_pH_in_history(), Fieldnames.EC_IN, self._controller.get_EC_in_history())
         self._systemHealth = SmartLysimeterSystemHealth(self._root)
         self._settings = SmartLysimeterSettings(self._root, self._controller)
         self._phWindow = SmartLysimeterPlotWindow(self._historyLength, self._controller.get_timestamp_history(), Fieldnames.PH_DR, self._controller.get_pH_dr_history(), Fieldnames.PH_IN, self._controller.get_pH_in_history())
@@ -42,7 +42,7 @@ class SmartLysimeterView(Observer):
 
     def switch_to(self, window: SmartLysimeterWindow):
         if (window == self._currWindow):
-            pass
+            return
         self._canvas.delete("health||settings||home||pH||EC||drainage")
         self._currWindow.unplace()
         self._currWindow = window
@@ -56,7 +56,7 @@ class SmartLysimeterView(Observer):
 
     def add_data_point(self):
         reading = self._controller.get_last_reading()
-        self._home.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.PH_DR], reading[Fieldnames.EC_DR])
+        self._home.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.PH_IN], reading[Fieldnames.EC_IN])
         self._phWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.PH_DR], reading[Fieldnames.PH_IN])
         self._ecWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.EC_DR], reading[Fieldnames.EC_IN])
         self._drainageWindow.add_data_point(reading[Fieldnames.TIMESTAMP], reading[Fieldnames.DRAINAGE])
@@ -199,6 +199,9 @@ class SmartLysimeterView(Observer):
         self.tick()
         self._root.resizable(False, False)
         self._root.mainloop()
+
+    def set_history_length(self, historyLength):
+        pass
     
     def tick(self):
         # get the current local time from the PC
