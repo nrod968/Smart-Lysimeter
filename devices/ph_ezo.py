@@ -1,6 +1,7 @@
 from enum import Enum
 import time
-from devices.sensor import SmartLysimeterSensor
+from weakref import CallableProxyType
+from devices.sensor import Calibration, SmartLysimeterSensor
 from utils.data_protocol import Protocol
 from utils.uart import UART
 
@@ -32,4 +33,7 @@ class PHSensor(SmartLysimeterSensor):
             time.sleep(0.1)
     
     def calibrate(self, calType, calVal):
-        self._backend.send_cmd(str(calType).format(calVal))
+        if (calType == Calibration.MID):
+            self._backend.send_cmd(str(PHCommand.CAL_MID).format(calVal))
+        elif (calType == Calibration.LOW):
+            self._backend.send_cmd(str(PHCommand.CAL_LOW).format(calVal))

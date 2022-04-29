@@ -63,6 +63,8 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
             self._plot1.axhline(y=EC_MIN, color='darkorange', linestyle=(5, (5, 5)))
             self._plot1.axhline(y=EC_MAX, color='darkorange', linestyle=(5, (5, 5)))
         elif (self._dataName1 == Fieldnames.DRAINAGE):
+            xfmt = DateFormatter('%m/%d')
+            self._plot1.xaxis.set_major_formatter(xfmt)
             self._line1, = self._plot1.plot(self._timestamps, self._data1, color="purple", marker='o')
             self._plot1.set_ylabel(self._dataName1 + " (%)", color="purple")
             self._plot1.axhline(y=DR_MIN, color='red', linestyle=(5, (5, 5)))
@@ -144,23 +146,3 @@ class SmartLysimeterPlotWindow(SmartLysimeterDataWindow):
 
     def set_history_length(self, historyLength, timestamps, data1, data2=None):
         self._historyLength = historyLength
-
-        self._data1 = data1
-        self._timestamps = timestamps
-        self._line1.set_ydata(self._data1)
-        self._line1.set_xdata(self._timestamps)
-        self._plot1.set_xticks(self._timestamps)
-        self._plot1.relim()
-        self._plot1.autoscale_view()
-
-        if (self._isData2):
-            self._data2 = data2
-            self._line2.set_ydata(self._data2)
-            self._line2.set_xdata(self._timestamps)
-            self._plot2.set_xticks(self._timestamps)
-            self._plot2.relim()
-            self._plot2.autoscale_view()
-
-        if (self._isCurrWindow):
-            self._fig.canvas.draw()
-            self._fig.canvas.flush_events()

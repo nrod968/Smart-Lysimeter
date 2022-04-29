@@ -1,6 +1,6 @@
 from enum import Enum
 import time
-from devices.sensor import SmartLysimeterSensor
+from devices.sensor import Calibration, SmartLysimeterSensor
 from utils.data_protocol import Protocol
 from utils.uart import UART
 
@@ -32,7 +32,7 @@ class ECSensor(SmartLysimeterSensor):
             time.sleep(0.1)
 
     def calibrate(self, calType, calVal):
-        if (calType == ECCommand.CAL_DRY):
-            self._backend.send_cmd(calType)
+        if (calType == Calibration.DRY):
+            self._backend.send_cmd(str(ECCommand.CAL_DRY))
         else:
-            self._backend.send_cmd(str(calType).format(calVal))
+            self._backend.send_cmd(str(ECCommand.CAL).format(calVal))

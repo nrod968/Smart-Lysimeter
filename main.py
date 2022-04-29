@@ -9,8 +9,8 @@ TEST = True
 def collect_data(controller):
     sleep(1)
     while(True):
-        controller.generate_datapoint()
-        sleep(5)
+        pollingRate = controller.generate_datapoint()
+        sleep(pollingRate)
 
 def main():
     model = SmartLysimeterModel("db.json", "data.csv")

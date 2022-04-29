@@ -17,6 +17,7 @@ class SmartLysimeterController():
         self._pumpIn = Pump(Pump.INPUT_PIN)
         self._pumpDr = Pump(Pump.DRAINAGE_PIN)
         self._isTest = isTest
+        self._pollingRate = 5
         if (isTest):
             self._phIn = MockPHSensor()
             self._phDr = MockPHSensor()
@@ -35,6 +36,12 @@ class SmartLysimeterController():
             #self._dr = MockDRSensor()
             self._levIn = LevelSensor(channelRef=0, channelSense=1, bus=1, device=0)
             self._levDr = LevelSensor(channelRef=2, channelSense=3, bus=1, device=0)
+        
+    def set_polling_rate(self, pollingRate):
+        self._pollingRate = pollingRate
+    
+    def get_polling_rate(self):
+        return self._pollingRate
 
     def generate_datapoint(self):
         file = open("log.txt", 'a')
@@ -62,7 +69,7 @@ class SmartLysimeterController():
             levDrVal.append(self._levDr.read1())
             levDrVal = sum(levDrVal) / 3.0
             file.write("Dr Val: " + str(levDrVal) + "inches\n")
-            if (levDrVal >= 4.0 or levInVal >= 4.0):
+            if (levDrVal >= 3.0 or levInVal >= 3.0):
                 drainage = ((abs(levDrVal - levInVal)) / levInVal) * 100
                 file.write("Draining\n")
                 self.drain_tanks()
@@ -74,6 +81,7 @@ class SmartLysimeterController():
         self.record_data_point(timestamp, float(phInVal), float(ecInVal), float(phDrVal), float(ecDrVal), drainage)
         file.write("Finished\n")
         file.close()
+        return self._pollingRate
 
     def record_data_point(self, timestamp, phInReading, ecInReading, phDrReading, ecDrReading, drainageReading):
         if (isinstance(timestamp, float)):
@@ -91,6 +99,8 @@ class SmartLysimeterController():
             self._ecDr.calibrate(calType, calVal)
         elif (sensorType == Sensor.EC_DR):
             self._ecDr.calibrate(calType, calVal)
+        else:
+            raise Exception("Not a valid sensor")
     
     def shutdown(self):
         os.system("sudo shutdown -h now")

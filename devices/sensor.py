@@ -1,13 +1,16 @@
 import abc
 from enum import Enum, auto
 
-class Sensor(Enum):
-    PH_IN = auto()
-    PH_DR = auto()
-    EC_IN = auto()
-    EC_DR = auto()
-    LEVEL_IN = auto()
-    LEVEL_DR = auto()
+class Sensor(str, Enum):
+    PH_IN = "Input pH Sensor"
+    PH_DR = "Drainage pH Sensor"
+    EC_IN = "Input EC Sensor"
+    EC_DR = "Drainage EC Sensor"
+    LEVEL_IN = "Input Level Sensor"
+    LEVEL_DR = "Drainage Level Sensor"
+
+    def __str__(self) -> str:
+        return str.__str__(self)
 
 class Calibration(Enum):
     LOW = auto()

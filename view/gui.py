@@ -1,4 +1,4 @@
-from os import system
+from os import system, times
 from pathlib import Path
 import sys
 
@@ -88,13 +88,22 @@ class SmartLysimeterView(Observer):
     def set_history_length(self):
         self._historyLength = self._controller.get_history_length()
         timestamps = self._controller.get_timestamp_history()
-        ph = self._controller.get_pH_dr_history()
-        ec = self._controller.get_EC_dr_history()
+        phDr = self._controller.get_pH_dr_history()
+        ecDr = self._controller.get_EC_dr_history()
+        phIn = self._controller.get_pH_in_history()
+        ecIn = self._controller.get_EC_in_history()
         drainage = self._controller.get_drainage_history()
+
+        print(len(phDr))
+        print(len(phIn))
+        print(len(ecDr))
+        print(len(ecIn))
+        print(len(drainage))
+        print(len(timestamps))
         
-        self._home.set_history_length(self._historyLength, timestamps, ph, ec)
-        self._phWindow.set_history_length(self._historyLength, timestamps, ph)
-        self._ecWindow.set_history_length(self._historyLength, timestamps, ec)
+        self._home.set_history_length(self._historyLength, timestamps, phIn, ecIn)
+        self._phWindow.set_history_length(self._historyLength, timestamps, phDr, phIn)
+        self._ecWindow.set_history_length(self._historyLength, timestamps, ecDr, ecIn)
         self._drainageWindow.set_history_length(self._historyLength, timestamps, drainage)
 
     def exit(self):
@@ -199,9 +208,6 @@ class SmartLysimeterView(Observer):
         self.tick()
         self._root.resizable(False, False)
         self._root.mainloop()
-
-    def set_history_length(self, historyLength):
-        pass
     
     def tick(self):
         # get the current local time from the PC
